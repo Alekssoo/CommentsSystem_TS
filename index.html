@@ -11,13 +11,20 @@
     <form action="./" method="post" class ="comment_form">
         <!-- <label for="name">Имя</label> -->
         <!-- <input type="text" name="name" class="name"> -->
-    
-        <label for="comment">Комментарий</label>
-        <div class="comment_container">
-            <textarea required placeholder="Введите текст сообщения..." name="comment" class="comment"></textarea>
-    
-            <button type="submit" class="comment_submit" disabled>Отправить</button>
+        <div class="comment_block">
+            <div class="comment_photo">
+                <img src="sources/djunbox_3000.png" alt="photo" class="comment_photo_img">
+            </div>
+            <div class="comment_content">
+                <label for="comment" class ="user_name">Ник_пользователя</label>
+                <div class="comment_container">
+                    <textarea required placeholder="Введите текст сообщения..." name="comment" class="comment"></textarea>
+            
+                    <button type="submit" class="comment_submit" disabled>Отправить</button>
+                </div>
+            </div>
         </div>
     </form>
+    <script src="index.js"></script>
 </body>
 </html>
