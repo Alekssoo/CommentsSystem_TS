@@ -1,0 +1,30 @@
+.comment_form {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+    margin: 0 auto;
+    gap: 1em; 
+}
+
+.comment_container {
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.comment {
+    width: 75%;
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    /* border-color: ; */
+    border: none;
+}
+.comment_submit {
+    width: 20%;
+}
+.comment_submit:active {
+    background-color: #ABD873;
+}
+
+/*цвет активной кнопки  #ABD873, неактивной - #A1A1A1 */
