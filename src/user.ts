@@ -1,11 +1,11 @@
 class User {
     public name: string; //
-    constructor(name: string) { // параметр конструктора тоже строка
+    public photo: string; //
+    constructor(name: string, url: string) { // параметр конструктора тоже строка
         this.name = name;
+        this.photo = url; // возможно, позже сделать fetch
     }
 
-    // метод возвращает тип void, т.е. "Пустоту", значит, ничего и не ждём  
-    //на выходе
 //     public takeARoom():void {
 //         this.freeRoomsCount--;
 //     }
