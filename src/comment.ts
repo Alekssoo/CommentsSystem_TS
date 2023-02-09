@@ -2,21 +2,25 @@ export default class MyComment {
     public text: string | null; //
     public rating: number; //
     public maxlength: number;
-    public elements: Array<Node> = new Array(); //
+    public elements: Array<Node> = new Array(); 
+    public time: number;
     constructor() {
         this.rating = 0;
         this.maxlength = 1000;
         this.elements = []
-        this.text = "" 
+        this.text = ""
+        this.time = Math.floor(Date.now())
     }
 
-    public create(readyComment:HTMLElement):void {
+    public create(readyComment:HTMLElement, text: string):void {
         const form = document.querySelector('.comment_form')
         if (!form) { return }
+        this.time = Math.floor(Date.now())
+        this.text = text
         // var newDiv = document.createElement("div");
         // newDiv.innerHTML = "<h1>Привет!</h1>";
         let newComment = readyComment.cloneNode(true)
-        const codeComment = readyComment.outerHTML
+        //const codeComment = readyComment.outerHTML
         console.log("создан клон элемента")
         //newComment = HTMLDivElement(newComment)
         //console.log("клон. нода содержит элементов: ", newComment.childNodes.length)
@@ -26,7 +30,7 @@ export default class MyComment {
         this.elements.push(newComment)
         console.log("клон элемента добавлен в массив")
 
-        //this.text = newComment?.nodeValue
+        
         //newComment.querySelector(".comment")//
         
         

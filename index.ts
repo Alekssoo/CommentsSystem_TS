@@ -20,11 +20,11 @@ commentElem?.addEventListener("input", () => {
 
 button?.addEventListener ("click", (event) => {
     event?.preventDefault();
-    if (readyComment) {
+    if (readyComment && textComment) {
         // button.removeAttribute("disabled")
         const comment = new MyComment();
         // if (readyComment) {
-        comment.create(readyComment)
+        comment.create(readyComment, textComment)
         // } 
      
     } 
