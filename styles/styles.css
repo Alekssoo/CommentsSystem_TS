@@ -20,6 +20,7 @@
     display: flex;
     width: 100%;
     margin: 0 auto;
+    margin-bottom: 30px;
     justify-content: space-between;
     font-family: 'Inter', sans-serif;
 }
@@ -63,11 +64,13 @@
 .comment_submit {
     width: 20%;
     font-family: 'Inter', sans-serif;
+    border-radius: 5px;
     /* height: 50%; */
 }
 
 .comment_submit:enabled {
     background-color: #ABD873;
+    border: none;
 }
 
 /*цвет активной кнопки  #ABD873, неактивной - #A1A1A1 */

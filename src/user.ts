@@ -1,4 +1,4 @@
-class User {
+export default class User {
     public name: string; //
     public photo: string; //
     constructor(name: string, url: string) { // параметр конструктора тоже строка
