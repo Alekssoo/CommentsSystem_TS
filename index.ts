@@ -1,37 +1,33 @@
-import MyComment from "./src/comment.js";
+import Main from "./src/main.js";
 
-const readyComment:HTMLElement | null = document.querySelector(".comment_block")
-const container = document.querySelector(".comment_container")
-const commentElem:HTMLTextAreaElement | null = document.querySelector(".comment")
-const button = document.querySelector(".comment_submit")
+const main = new Main()
+main.prepare()
 
-let lenComment = commentElem?.value?.length
-let textComment  = commentElem?.value
-commentElem?.addEventListener("input", () => {
-    if (button) {
-        if (lenComment && lenComment > 1000) {
-            button.setAttribute('disabled', '');
-        } else { 
-            button.removeAttribute("disabled")
-        }
-    }
+// const readyComment:HTMLElement | null = document.querySelector(".comment_block")
+// const commentElem:HTMLTextAreaElement | null = document.querySelector(".comment")
+// const button = document.querySelector(".comment_submit")
 
-})
+// let lenComment = commentElem?.value?.length
 
-button?.addEventListener ("click", (event) => {
-    event?.preventDefault();
-    if (readyComment && textComment) {
-        // button.removeAttribute("disabled")
-        const comment = new MyComment();
-        // if (readyComment) {
-        comment.create(readyComment, textComment)
-        // } 
-     
-    } 
-    // else {
-    //     button.setAttribute('disabled', '');
-    // }
-})
+// commentElem?.addEventListener("input", () => {
+//     if (button) {
+//         if (lenComment && lenComment > 1000) {
+//             button.setAttribute('disabled', '');
+//         } else { 
+//             button.removeAttribute("disabled")
+//         }
+//     }
+
+// })
+
+// button?.addEventListener ("click", (event) => {
+//     event?.preventDefault();
+//     let textComment  = commentElem?.value
+//     if (readyComment && textComment) {
+//         const comment = new MyComment();
+//         comment.create(readyComment, textComment)
+//     } 
+// })
 
 // const game = new Game();
 // game.prepare().then(() => {
