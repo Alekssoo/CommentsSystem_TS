@@ -33,7 +33,8 @@ export default class Main {
             let textComment  = commentElem?.value
             if (readyComment && textComment) {
                 const comment = new MyComment();
-                comment.create(readyComment, textComment) 
+                comment.create(readyComment, textComment)
+                comment.clear(commentElem) 
             } 
         })
 

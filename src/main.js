@@ -29,6 +29,7 @@ export default class Main {
             if (readyComment && textComment) {
                 const comment = new MyComment();
                 comment.create(readyComment, textComment);
+                comment.clear(commentElem);
             }
         });
     }
