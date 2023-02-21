@@ -16,38 +16,11 @@ export default class MyComment {
         
     }
 
-    public create(readyComment:HTMLElement, text: string):void {
-        const form = document.querySelector('.comment_form')
-        if (!form) { return }
+    public create(text: string):void {
+        
         this.time = Math.floor(Date.now())
         this.text = text
-        let newText = document.createElement("p");
-        newText.textContent = this.text
-        newText.classList.add("comment_text")
-        // newDiv.innerHTML = "<h1>Привет!</h1>";
-        let newComment = readyComment.cloneNode(true)
-        //const codeComment = readyComment.outerHTML
-
-        console.log("3-й элемент из 3 блока коммента: ", newComment.childNodes[3].childNodes[3])
-
-        //определяем и удаляем textarea из готового коммента
-        let commentContent = newComment.childNodes[3].childNodes[3]
-
-        let commentTextNode = commentContent.childNodes[1]
         
-        commentContent.removeChild(commentTextNode)
-        
-        ////определяем и удаляем button из готового коммента
-        let commentReadyButton = commentContent.childNodes[2]
-        
-        commentContent.removeChild(commentReadyButton)
-        commentContent.appendChild(newText)
-        newText.parentNode?.querySelector(".comment_container")?.classList.remove("comment_container")
-        //newComment.removeChild(commentContentNode)
-        console.log("создан клон элемента")
-        console.log("клон. нода содержит элементов: ", newComment.childNodes.length)
-        form.appendChild(newComment)
-        // form.innerHTML += codeComment
         console.log("клон элемента добавлен на страницу")
         this.elements.push({
             author: this.author,
@@ -55,18 +28,42 @@ export default class MyComment {
             rating: this.rating,
             time: this.time
             })
-        console.log("клон элемента добавлен в массив:")
-        console.log(this.elements)
+        
 
+        //this.save() //метод готов, но чуть позже начнем сохранять
         
-        //newComment.querySelector(".comment")//
-        
-        
-        // const container = newComment.querySelector(".comment_container")
-    // Добавляем только что созданный элемент в дерево DOM
-
-    // my_div = document.getElementById("org_div1");
     // document.body.insertBefore(newDiv, my_div);
+    }
+
+    public show(form:HTMLElement | null, readyComment:HTMLElement):void {
+        if (!form) { return }
+
+        let newText = document.createElement("p");
+        newText.textContent = this.text
+        newText.classList.add("comment_text")
+        
+
+        let newComment = readyComment.cloneNode(true)
+        //const codeComment = readyComment.outerHTML
+
+        //определяем и удаляем ,блок для ввода и отправки из введ-го коммента
+        let commentContentToRemove = newComment.childNodes[3].childNodes[3]
+        let commentContent = newComment.childNodes[3]
+        commentContent.removeChild(commentContentToRemove)
+        //commentContent
+
+        commentContent.appendChild(newText)
+
+        //сделать норм расстояние между элемента флекса:
+        if (newText.parentElement) {
+            newText.parentElement.style.gap = "0";
+        }
+        
+        //newText.parentNode?.querySelector(".comment_container")?.classList.remove("comment_container")
+        //newComment.removeChild(commentContentNode)
+        //console.log("создан клон элемента")
+        //console.log("клон. нода содержит элементов: ", newComment.childNodes.length)
+        form.appendChild(newComment)
     }
 
     public clear(comment:HTMLTextAreaElement | null):void {
@@ -74,6 +71,11 @@ export default class MyComment {
             comment.value = "";
 
         }
+
+    }
+
+    public save():void {
+        localStorage.setItem("comments", JSON.stringify(this.elements))
 
     }
 }

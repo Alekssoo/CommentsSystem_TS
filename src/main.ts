@@ -10,32 +10,42 @@ export default class Main {
     }
 
     public prepare():void {
+        const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const readyComment:HTMLElement | null = document.querySelector(".comment_block")
         const container = document.querySelector(".comment_container")
         const commentElem:HTMLTextAreaElement | null = document.querySelector(".comment")
         const button = document.querySelector(".comment_submit")
+        //checkButton()
 
-        commentElem?.addEventListener("input", () => {
-            let lenComment = commentElem?.value?.length
+        commentElem?.addEventListener("input", checkButton)
+
+        function checkButton(): void {
             
-            if (button) {
-                if (lenComment && lenComment > 1000) {
-                    button.setAttribute('disabled', '');
-                } else { 
-                    button.removeAttribute("disabled")
+                let lenComment = commentElem?.value?.length
+                
+                if (button) {
+                    console.log("длина введенного коммента: ", lenComment)
+                    if (!lenComment || lenComment && lenComment > 1000) {
+                        button.setAttribute('disabled', '');
+                    } else { 
+                        button.removeAttribute("disabled")
+                    }
                 }
-            }
+            
+            
+        }
         
-        })
 
         button?.addEventListener ("click", (event) => {
             event?.preventDefault();
             let textComment  = commentElem?.value
             if (readyComment && textComment) {
                 const comment = new MyComment();
-                comment.create(readyComment, textComment)
+                comment.create(textComment)
+                comment.show(formComment, readyComment)
                 comment.clear(commentElem) 
-            } 
+            }
+            checkButton(); 
         })
 
     }

@@ -73,4 +73,9 @@
     border: none;
 }
 
+.comment_text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    line-height: 22px;
+}
 /*цвет активной кнопки  #ABD873, неактивной - #A1A1A1 */
