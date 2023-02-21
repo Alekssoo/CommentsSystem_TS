@@ -21,7 +21,9 @@ export default class MyComment {
         if (!form) { return }
         this.time = Math.floor(Date.now())
         this.text = text
-        // var newDiv = document.createElement("div");
+        let newText = document.createElement("p");
+        newText.textContent = this.text
+        newText.classList.add("comment_text")
         // newDiv.innerHTML = "<h1>Привет!</h1>";
         let newComment = readyComment.cloneNode(true)
         //const codeComment = readyComment.outerHTML
@@ -29,16 +31,18 @@ export default class MyComment {
         console.log("3-й элемент из 3 блока коммента: ", newComment.childNodes[3].childNodes[3])
 
         //определяем и удаляем textarea из готового коммента
-        let commentTextNode = newComment.childNodes[3].childNodes[3].childNodes[1]
+        let commentContent = newComment.childNodes[3].childNodes[3]
 
-        newComment.childNodes[3].childNodes[3].removeChild(commentTextNode)
-
+        let commentTextNode = commentContent.childNodes[1]
+        
+        commentContent.removeChild(commentTextNode)
+        
         ////определяем и удаляем button из готового коммента
-        let commentReadyButton = newComment.childNodes[3].childNodes[3].childNodes[2]
-
-        newComment.childNodes[3].childNodes[3].removeChild(commentReadyButton)
-
-
+        let commentReadyButton = commentContent.childNodes[2]
+        
+        commentContent.removeChild(commentReadyButton)
+        commentContent.appendChild(newText)
+        newText.parentNode?.querySelector(".comment_container")?.classList.remove("comment_container")
         //newComment.removeChild(commentContentNode)
         console.log("создан клон элемента")
         console.log("клон. нода содержит элементов: ", newComment.childNodes.length)
