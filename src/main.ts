@@ -13,15 +13,54 @@ export default class Main {
         const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const readyComment:HTMLElement | null = document.querySelector(".comment_block")
         const container = document.querySelector(".comment_container")
-        const commentElem:HTMLTextAreaElement | null = document.querySelector(".comment")
-        const button = document.querySelector(".comment_submit")
+        const commentTextElem:HTMLTextAreaElement | null = document.querySelector(".comment")
+        const button:HTMLButtonElement | null = document.querySelector(".comment_submit")
+        const labelComment:HTMLElement | null = document.querySelector(".comment_block")
         //checkButton()
+        const comment = new MyComment();
+        commentTextElem?.addEventListener("input", () =>
+            this.setButton(commentTextElem, button))
+        // let checkLengthComment = comment.checkLength(commentElem, button); 
+        //let checkLengthComment = this.checkButton(commentElem, button); 
+        // if (commentElem) {
+        
+        // }
 
-        commentElem?.addEventListener("input", checkButton)
-
-        function checkButton(): void {
+        // function checkButton(): void {
             
-                let lenComment = commentElem?.value?.length
+        //         let lenComment = commentElem?.value?.length
+                
+        //         if (button) {
+        //             console.log("длина введенного коммента: ", lenComment)
+        //             if (!lenComment || lenComment && lenComment > 1000) {
+        //                 button.setAttribute('disabled', '');
+        //             } else { 
+        //                 button.removeAttribute("disabled")
+        //             }
+        //         }
+            
+            
+        // }
+        
+
+        button?.addEventListener ("click", (event) => {
+            event?.preventDefault();
+            let textComment  = commentTextElem?.value
+            
+            if (readyComment && textComment) {
+                
+                comment.create(textComment)
+                comment.show(formComment, readyComment)
+                comment.clear(commentTextElem) 
+            }
+            this.setButton(commentTextElem, button); 
+        })
+
+    }
+
+    private setButton(textArea:HTMLTextAreaElement | null, button:HTMLElement | null): void {
+        
+        let lenComment = textArea?.value?.length
                 
                 if (button) {
                     console.log("длина введенного коммента: ", lenComment)
@@ -31,23 +70,7 @@ export default class Main {
                         button.removeAttribute("disabled")
                     }
                 }
-            
-            
-        }
         
-
-        button?.addEventListener ("click", (event) => {
-            event?.preventDefault();
-            let textComment  = commentElem?.value
-            if (readyComment && textComment) {
-                const comment = new MyComment();
-                comment.create(textComment)
-                comment.show(formComment, readyComment)
-                comment.clear(commentElem) 
-            }
-            checkButton(); 
-        })
-
     }
 
 }
