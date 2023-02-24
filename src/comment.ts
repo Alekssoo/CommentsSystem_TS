@@ -68,31 +68,29 @@ export default class MyComment {
             // определяем и удаляем, блок для ввода,отправки из введ-го коммента 
             // и уведомление о длине, заменяем на текстовый абзац
             for (const item of newComment.childNodes) {
-                let containerElem = item.parentElement?.querySelector(".comment_container")
-                let commentLengh = item.parentElement?.querySelector(".comment_length")
-                let contentElem:HTMLElement | null | undefined = item.parentElement?.querySelector(".comment_content")
+                const parentBlock = item.parentElement
+                let containerElem = parentBlock?.querySelector(".comment_container")
+                let commentLengh = parentBlock?.querySelector(".comment_length")
+                let contentElem:HTMLElement | null | undefined = parentBlock?.querySelector(".comment_content")
                 if (containerElem && contentElem && commentLengh) {
                     containerElem.remove()
                     commentLengh.remove()
                     contentElem.appendChild(newText)
                     //console.log(newText)
+
+                    // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
+                    const labelName:HTMLLabelElement | null = contentElem.querySelector(".comment_username");
+                    if (labelName) {
+                        labelName.classList.add("comment_ready_username")
+                        labelName.htmlFor = "commentReadyText"
+                        labelName.dataset.el = this.time
+                    }
                     break
+
                     // return
                 }
             }
 
-            // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
-            if (newText.parentElement) {
-                const labelName:HTMLLabelElement | null = newText.parentElement.querySelector(".comment_username");
-                if (labelName) {
-                    labelName.classList.add("comment_ready_username")
-                    labelName.htmlFor = "commentReadyText"
-                    labelName.dataset.el = this.time
-                    
-                }
-
-
-            }
             // и добавляем итоговый блок в форму
             form.appendChild(newComment)
         }
