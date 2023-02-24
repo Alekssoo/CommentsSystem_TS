@@ -1,11 +1,11 @@
 export default class MyComment {
-    public text: string | null; //
-    public rating: number; //
+    public text: string | null; 
+    public rating: number; 
     public maxlength: number;
     public elements: Array<any> = new Array(); 
     public time: string;
     public author: string;
-
+    private id: number;
 
     constructor() {
         this.rating = 0;
@@ -14,22 +14,27 @@ export default class MyComment {
         this.text = ""
         this.author = ""
         this.time = ""
-        
+        this.id = 0
     }
 
     public create(text: string):void {
-        
+        // сначала подгружаем из localstorage массив с комментами
+        // устанавливаем текущий id = его длине
+        this.id = this.elements.length
         this.setTime(Math.floor(Date.now()/1000))
-
         this.text = text
-        
-        console.log("клон элемента добавлен на страницу")
+
+        console.log("id для нового элемента равен = ", this.id)
+
         this.elements.push({
+            id: this.id,
             author: this.author,
             text: this.text,
             rating: this.rating,
             time: this.time
             })
+        
+        //this.id++;
         
 
         //this.save() //метод готов, но чуть позже начнем сохранять
@@ -46,22 +51,23 @@ export default class MyComment {
     public show(form:HTMLElement | null, readyComment:HTMLElement):void {
         if (!form) { return }
 
-        this.elements.forEach(element => {
+        // создаем новый абзац из отправленного комментария
+        
+        for (let i = this.id; i <= this.elements.length-1;i++){
+            //console.log("зашли в цикл для переобра элементов массива")
             let newText = document.createElement("p");
-            newText.textContent = element.text
+            newText.textContent = this.elements[i].text
+            //console.log(this.elements[i-1])
             newText.classList.add("comment_text")
             newText.id = "commentReadyText"
             
-
+            //клонируем и переделываем контэйнер с комментарием для показа
             let newComment = readyComment.cloneNode(true)
-            //const codeComment = readyComment.outerHTML
+            
 
             // определяем и удаляем, блок для ввода,отправки из введ-го коммента 
             // и уведомление о длине, заменяем на текстовый абзац
             for (const item of newComment.childNodes) {
-
-            
-            // newComment.childNodes.forEach((item) =>{
                 let containerElem = item.parentElement?.querySelector(".comment_container")
                 let commentLengh = item.parentElement?.querySelector(".comment_length")
                 let contentElem:HTMLElement | null | undefined = item.parentElement?.querySelector(".comment_content")
@@ -69,71 +75,27 @@ export default class MyComment {
                     containerElem.remove()
                     commentLengh.remove()
                     contentElem.appendChild(newText)
-                    //contentElem.style.gap = "0";
-                    console.log(newText)
+                    //console.log(newText)
                     break
                     // return
                 }
             }
-            // let newCommentContent = newComment.childNodes[3]
-            // let contentToRemove = newCommentContent.childNodes[3]
 
-            // console.log(newComment.childNodes[3])
-            //это label, нужно заменить ему for и сделать отдельный класс
-            // как для этого найти именно элемент, а не ноду ?
-            
-            // newCommentContent.removeChild(contentToRemove)
-
-            // newCommentContent.appendChild(newText)
-
-            
             // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
             if (newText.parentElement) {
-                // newText.parentElement.style.gap = "0";
                 const labelName:HTMLLabelElement | null = newText.parentElement.querySelector(".comment_username");
                 if (labelName) {
                     labelName.classList.add("comment_ready_username")
                     labelName.htmlFor = "commentReadyText"
                     labelName.dataset.el = this.time
-                    // labelName.dataset.el.
                     
-                    //labelName.classList.add("opacity_text") нужно добавить не самому имени пользователя, а послед. элементам
-                    
-                    //window.getComputedStyle(labelName,':after').content = this.time;
                 }
 
 
             }
-            
-            //newText.parentNode?.querySelector(".comment_container")?.classList.remove("comment_container")
-            //newComment.removeChild(commentContentNode)
-            //console.log("создан клон элемента")
-            //console.log("клон. нода содержит элементов: ", newComment.childNodes.length)
+            // и добавляем итоговый блок в форму
             form.appendChild(newComment)
-        });
-
-        // let newText = document.createElement("p");
-        // newText.textContent = this.text
-        // newText.classList.add("comment_text")
-        
-
-        // let newComment = readyComment.cloneNode(true)
-        
-
-        // //определяем и удаляем ,блок для ввода и отправки из введ-го коммента
-        // let commentContentToRemove = newComment.childNodes[3].childNodes[3]
-        // let newCommentContent = newComment.childNodes[3]
-        // newCommentContent.removeChild(commentContentToRemove)
-        
-
-        // newCommentContent.appendChild(newText)
-
-        // //сделать норм расстояние между элемента флекса:
-        // if (newText.parentElement) {
-        //     newText.parentElement.style.gap = "0";
-        // }
-    
-        // form.appendChild(newComment)
+        }
     }
 
     private setTime(UNIC_timestamp:number): void {
