@@ -12,35 +12,19 @@ export default class Main {
     public prepare():void {
         const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const readyComment:HTMLElement | null = document.querySelector(".comment_block")
-        const container = document.querySelector(".comment_container")
+        // const container = document.querySelector(".comment_container")
         const commentTextElem:HTMLTextAreaElement | null = document.querySelector(".comment")
-        const button:HTMLButtonElement | null = document.querySelector(".comment_submit")
-        const labelComment:HTMLElement | null = document.querySelector(".comment_block")
+        const submitAlert:HTMLButtonElement | null = document.querySelector(".comment_submit_alarm")
+        const button:HTMLButtonElement | null = document.querySelector(".comment_submit_button")
+        const lengthComment:HTMLElement | null = document.querySelector(".comment_length")
         //checkButton()
         const comment = new MyComment();
         commentTextElem?.addEventListener("input", () =>
-            this.setButton(commentTextElem, button))
-        // let checkLengthComment = comment.checkLength(commentElem, button); 
-        //let checkLengthComment = this.checkButton(commentElem, button); 
-        // if (commentElem) {
+            // this.setButton(commentTextElem, button))
+            comment.checkLength(commentTextElem, button, lengthComment, submitAlert))
         
-        // }
-
-        // function checkButton(): void {
-            
-        //         let lenComment = commentElem?.value?.length
-                
-        //         if (button) {
-        //             console.log("длина введенного коммента: ", lenComment)
-        //             if (!lenComment || lenComment && lenComment > 1000) {
-        //                 button.setAttribute('disabled', '');
-        //             } else { 
-        //                 button.removeAttribute("disabled")
-        //             }
-        //         }
-            
-            
-        // }
+        
+        
         
 
         button?.addEventListener ("click", (event) => {

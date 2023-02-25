@@ -22,11 +22,17 @@
                 </div>
                 
                 <div class="comment_container">
-                    <textarea required placeholder="Введите текст сообщения..." maxlength="1001" name="comment" class="comment"></textarea>
-            
-                    <button type="submit" class="comment_submit" disabled>Отправить</button>
+                    <textarea required placeholder="Введите текст сообщения..." name="comment" class="comment"></textarea>
+                    
+                    
                 </div>
             </div>
+            <div class="comment_submit">
+                
+                <button type="submit" class="comment_submit_button" disabled>Отправить</button>
+                <p class="comment_submit_alarm alarm_text">Слишком длинное сообщение</p>
+            </div>
+
         </div>
     </form>
     <script src="index.js" type="module"></script>

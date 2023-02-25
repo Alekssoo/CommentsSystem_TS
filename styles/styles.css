@@ -3,7 +3,7 @@
 .comment_form {
     display: flex;
     flex-direction: column;
-    max-width: 85%;
+    width: 95%;
     margin: 0 auto;
     font-family: 'Inter', sans-serif;
     font-size: 18px;
@@ -25,6 +25,17 @@
     font-size: 70%;
     display: inline; 
     margin-left: 7px;
+}
+
+.alarm_text {
+    color:#FF0000;
+    opacity: 1;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    margin-bottom: 3px;
+    margin-top: 0;
 }
 
 .comment_photo_img {
@@ -50,35 +61,67 @@
 .comment_head {
     display: flex;
     justify-content: space-between;
-    max-width: 76%;
+    width: 90%;
     margin-bottom: 5px;
 }
 
+/* .comment_head::after {
+    content: "Слишком длинное сообщение";
+    color : #FF0000;
+    opacity: 1;
+    font-size: 70%;
+    width: 213px;
+} */
+
 .comment_container {
     display: flex; 
-    justify-content: space-between; 
+    justify-content: space-between;
 }
 
 .comment {
-    width: 75%;
+    width: 90%;
     font-family: 'Inter', sans-serif;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     border: none;
     resize: none;
-    padding: 5px;
+    height: 61px;
 }
 
+.comment:focus {
+    border: 1px solid #A2A2A2;
+    /* border-color: #A2A2A2; */
+    outline: none;
+}
 
 .comment_submit {
-    width: 20%;
-    font-family: 'Inter', sans-serif;
-    border-radius: 5px;
+    width: 25%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
 }
 
-.comment_submit:enabled {
+.comment_submit_button {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    border-radius: 5px;
+    height: 61px;
+}
+
+.comment_submit_button:enabled {
     background-color: #ABD873;
     border: none;
+}
+
+.comment_submit_button:disabled {
+    background-color: #A2A2A2;
+    border: none;
+    opacity: 0.4;
+    color: #000;
+}
+
+.comment_submit_alarm {
+    display: none;
 }
 
 .comment_text {
@@ -89,7 +132,7 @@
     margin-bottom: 0;
 }
 
-.comment_ready_username:after {
+.comment_ready_username::after {
     content: attr(data-el);
     color: #000;
     opacity: 0.4;
