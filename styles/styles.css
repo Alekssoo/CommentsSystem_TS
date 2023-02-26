@@ -10,6 +10,22 @@
     line-height: 22px;
 }
 
+.comments_params {
+    
+    display: flex;
+    /* max-width: 1440px; */
+    border: 1px solid black;
+    width: 55%;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    list-style: none;
+}
+
+.comments_params_item {
+    margin-right: 10px;
+}
+
 .comment_block {
     display: flex;
     width: 100%;
@@ -79,7 +95,7 @@
 }
 
 .comment {
-    width: 90%;
+    width: 95%;
     font-family: 'Inter', sans-serif;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
@@ -95,7 +111,7 @@
 }
 
 .comment_submit {
-    width: 25%;
+    width: 30%;
     display: flex;
     flex-direction: column-reverse;
     justify-content: space-between;
@@ -106,6 +122,7 @@
     font-family: 'Inter', sans-serif;
     border-radius: 5px;
     height: 61px;
+    padding: 0;
 }
 
 .comment_submit_button:enabled {
@@ -122,6 +139,9 @@
 
 .comment_submit_alarm {
     display: none;
+    line-height: 10px;
+    height: 20%;
+    font-size: 11px;
 }
 
 .comment_text {

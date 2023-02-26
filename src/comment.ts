@@ -120,15 +120,18 @@ export default class MyComment {
             if (!lenComment) {
                 button.setAttribute('disabled', '');
                 lengthComment.textContent = "Макс. 1000 символов"
-                lengthComment.style.color = "#000"
-                lengthComment.style.opacity = "0.4"
+                // lengthComment.style.color = "#000"
+                // lengthComment.style.opacity = "0.4"
+                lengthComment.classList.remove("alarm_text")
                 submitAlert.style.display = "none"
             } else if (lenComment && lenComment > 1000) {
                 button.setAttribute('disabled', '');
                 lengthComment.textContent = `${lenComment}/${this.maxlength}`
-
-                lengthComment.style.color = "#FF0000"
-                lengthComment.style.opacity = "1"
+                // lengthComment.classList.remove("opacity_text")
+                lengthComment.classList.add("alarm_text")
+                // lengthComment.style.color = "#FF0000"
+                // lengthComment.style.opacity = "1"
+                lengthComment.classList.remove("alarm_text")
                 submitAlert.style.display = "inline-block"
                 // lengthComment.parentElement.after.
                 // lengthComment.parentElement.dataset.el = `Слишком длинное сообщение`
