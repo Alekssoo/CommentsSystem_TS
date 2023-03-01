@@ -15,8 +15,17 @@
             <hr class="comments_line">
             <ul class="comments_params">
                 <li class="comments_params_item comments_params_main">Комментарии </li>
-                <li class="comments_params_item opacity_text"><a href="" class="comments_params_link">По количеству оценок</a></li>
-                <li class="comments_params_item opacity_text"><a href="" class="comments_params_link">Избранное</a></ul>
+                <li class="comments_params_item">
+                    <!-- <a href="" class="comments_params_link opacity_text"> -->
+                    <select id="mounth">
+                        <option value="hide" class="opacity_text">По дате</option>
+                        <option value="january" class="opacity_text">По количеству оценок</option>
+                        <option value="february" class="opacity_text">По актуальности</option>
+                        <option value="march" class="opacity_text">По количеству ответов</option>
+                    <!-- </a> -->
+                    </select>
+                </li>
+                <li class="comments_params_item"><a href="" class="comments_params_link opacity_text">Избранное</a></ul>
             </ul>
             <!-- <span class="comments_quantity">Комментарии</span>
             <span class="comments_sort">По количеству оценок</span>
