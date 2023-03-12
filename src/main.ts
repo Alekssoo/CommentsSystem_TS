@@ -12,6 +12,8 @@ export default class Main {
     public prepare():void {
         const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const readyComment:HTMLElement | null = document.querySelector(".comment_block")
+        const sortComment:HTMLSelectElement | null = document.querySelector(".comments_params_sort")
+        // const sortComment:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
         // const container = document.querySelector(".comment_container")
         const commentTextElem:HTMLTextAreaElement | null = document.querySelector(".comment")
         const submitAlert:HTMLButtonElement | null = document.querySelector(".comment_submit_alarm")
@@ -40,6 +42,30 @@ export default class Main {
             this.setButton(commentTextElem, button); 
         })
 
+        
+        
+        sortComment?.addEventListener ("click", (event) => {
+            if (sortComment){
+                let replacedSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/✔ /gi, "");
+                sortComment.options[sortComment.selectedIndex].textContent = replacedSort || null
+                let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
+                sortComment.options[sortComment.selectedIndex].textContent = currentSort;
+            }
+        })
+
+        sortComment?.addEventListener ("change", (event) => {
+            let currentOptionText = sortComment.options[sortComment.selectedIndex].textContent
+            if (sortComment){
+                let replacedSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/✔ /gi, "");
+                sortComment.options[sortComment.selectedIndex].textContent = replacedSort || null
+                // sortComment.options[sortComment.selectedIndex].textContent = currentSort;
+                
+                // let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
+                // sortComment.options[sortComment.selectedIndex].textContent = currentSort;
+            }
+        })
+            // sortComment.dataset.el = "✔";
+        
     }
 
     private setButton(textArea:HTMLTextAreaElement | null, button:HTMLElement | null): void {
