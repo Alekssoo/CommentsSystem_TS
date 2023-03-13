@@ -13,7 +13,7 @@ export default class Main {
         const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const readyComment:HTMLElement | null = document.querySelector(".comment_block")
         const sortComment:HTMLSelectElement | null = document.querySelector(".comments_params_sort")
-        // const sortComment:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
+        const sortCommentList:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
         // const container = document.querySelector(".comment_container")
         const commentTextElem:HTMLTextAreaElement | null = document.querySelector(".comment")
         const submitAlert:HTMLButtonElement | null = document.querySelector(".comment_submit_alarm")
@@ -44,28 +44,49 @@ export default class Main {
 
         
         
-        sortComment?.addEventListener ("click", (event) => {
-            if (sortComment){
-                let replacedSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/✔ /gi, "");
-                sortComment.options[sortComment.selectedIndex].textContent = replacedSort || null
-                let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
-                sortComment.options[sortComment.selectedIndex].textContent = currentSort;
-            }
-        })
 
-        sortComment?.addEventListener ("change", (event) => {
-            let currentOptionText = sortComment.options[sortComment.selectedIndex].textContent
-            if (sortComment){
-                let replacedSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/✔ /gi, "");
-                sortComment.options[sortComment.selectedIndex].textContent = replacedSort || null
-                // sortComment.options[sortComment.selectedIndex].textContent = currentSort;
+        if (sortComment){
+            sortComment.addEventListener ("click", (event) => {
+                sortCommentList.forEach((sortType) => {
+                    let replacedSort = sortType.textContent?.replace(/✔ /gi, "");
+                    sortType.textContent = replacedSort || null
+                    
+                    if (!sortType.classList.contains("active")) {
+                        sortType.classList.add("active")
+                        
+                    } else {
+                        sortType.classList.remove("active")
+                    }
+
+
+                })
+
+                let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
+                sortComment.options[sortComment.selectedIndex].textContent = currentSort;  
                 
-                // let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
-                // sortComment.options[sortComment.selectedIndex].textContent = currentSort;
-            }
-        })
+                // if (sortComment){
+                    
+                //     let replacedSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/✔ /gi, "");
+                //     sortComment.options[sortComment.selectedIndex].textContent = replacedSort || null
+                //     let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
+                //     sortComment.options[sortComment.selectedIndex].textContent = currentSort;
+                // }
+            })
+
+            // sortComment.addEventListener ("change", (event) => {
+            //     sortCommentList.forEach((sortType) => {
+            //         let replacedSort = sortType.textContent?.replace(/✔ /gi, "");
+            //         sortType.textContent = replacedSort || null
+            //     })
+            //     let currentOptionText = sortComment.options[sortComment.selectedIndex].textContent
+                    
+            //     let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
+            //     sortComment.options[sortComment.selectedIndex].textContent = currentSort;
+                
+            // })
+
             // sortComment.dataset.el = "✔";
-        
+        }
     }
 
     private setButton(textArea:HTMLTextAreaElement | null, button:HTMLElement | null): void {

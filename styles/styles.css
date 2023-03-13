@@ -141,6 +141,8 @@
     background-position: center center;
 }
 
+
+
 .comments_params_sort option::before {
     content: "✔";
 }
@@ -162,6 +164,15 @@
     background-repeat: no-repeat;
     background-position: center center;
     display: inline-block; */
+}
+
+.comments_sort_pretext {
+    text-decoration: none;
+    display: none;
+}
+
+.active {
+    display: inline;
 }
 
 .comment_block {
