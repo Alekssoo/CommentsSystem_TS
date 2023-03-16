@@ -114,14 +114,12 @@ export default class MyComment {
 
     public checkLength(commentTextElem: HTMLTextAreaElement | null, button: HTMLButtonElement | null, lengthComment:HTMLElement | null, submitAlert: HTMLElement | null):void {
         let lenComment = commentTextElem?.value?.length
-        // проверка длины сообщения и        
+        // проверка длины сообщения и 
         if (button && lengthComment && lengthComment.parentElement && submitAlert) {
             console.log("длина введенного коммента: ", lenComment)
             if (!lenComment) {
                 button.setAttribute('disabled', '');
                 lengthComment.textContent = "Макс. 1000 символов"
-                // lengthComment.style.color = "#000"
-                // lengthComment.style.opacity = "0.4"
                 lengthComment.classList.remove("alarm_text")
                 submitAlert.style.display = "none"
             } else if (lenComment && lenComment > 1000) {

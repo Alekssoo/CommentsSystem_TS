@@ -31,13 +31,15 @@ export default class Main {
 
         button?.addEventListener ("click", (event) => {
             event?.preventDefault();
+            
             let textComment  = commentTextElem?.value
             
             if (readyComment && textComment) {
                 
                 comment.create(textComment)
                 comment.show(formComment, readyComment)
-                comment.clear(commentTextElem) 
+                comment.clear(commentTextElem)
+                comment.checkLength(commentTextElem, button, lengthComment, submitAlert) 
             }
             this.setButton(commentTextElem, button); 
         })
@@ -47,31 +49,53 @@ export default class Main {
 
         if (sortComment){
             sortComment.addEventListener ("click", (event) => {
+                if(!sortComment.classList.contains("active")){
+                    sortComment.classList.add("active")
+                } else {
+                    sortComment.classList.remove("active")
+                }
+
                 sortCommentList.forEach((sortType) => {
                     let replacedSort = sortType.textContent?.replace(/✔ /gi, "");
-                    sortType.textContent = replacedSort || null
-                    
+                    sortType.textContent = replacedSort || sortType.textContent
+                    console.log("на замену галочки: ", replacedSort)
+
                     if (!sortType.classList.contains("active")) {
                         sortType.classList.add("active")
-                        
+                        sortType.textContent = `\u00A0\u00A0\u00A0\u00A0${sortType.textContent}`
                     } else {
                         sortType.classList.remove("active")
+                        // sortComment.textContent = sortType.textContent?.replace(/\u00A0\u00a0/g, "") || sortType.textContent;
+                        // console.log("на замену пробелов: ", sortType.textContent?.replace(/\u00a0\u00A0/g, ""))
+                        sortType.textContent = sortType.textContent?.trim() || sortType.textContent
                     }
 
 
                 })
 
-                let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
-                sortComment.options[sortComment.selectedIndex].textContent = currentSort;  
+                if (sortComment.options[sortComment.selectedIndex] && sortComment.options[sortComment.selectedIndex].classList.contains("active")) {
+                    let replacedCurrentSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/\u00A0\u00A0\u00A0\u00A0/g,"✔ ");
                 
-                // if (sortComment){
-                    
-                //     let replacedSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/✔ /gi, "");
-                //     sortComment.options[sortComment.selectedIndex].textContent = replacedSort || null
-                //     let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
-                //     sortComment.options[sortComment.selectedIndex].textContent = currentSort;
-                // }
+                    console.log("с добавленной галочкой: ", replacedCurrentSort)
+                    sortComment.options[sortComment.selectedIndex].textContent = replacedCurrentSort || sortComment.options[sortComment.selectedIndex].textContent;  
+                }
+
+
             })
+
+            sortComment.addEventListener("focusout", () => {
+                if(sortComment.classList.contains("active")){
+                    sortComment.classList.remove("active")
+                }
+                sortCommentList.forEach((sortType) => {
+                    if (sortType.classList.contains("active")) {
+                        sortType.textContent = sortType.textContent?.replace(/✔ /gi, "") || sortType.textContent;
+                        sortType.textContent = sortType.textContent?.trim() || sortType.textContent
+                        sortType.classList.remove("active")
+                    }
+                });
+                
+        })
 
             // sortComment.addEventListener ("change", (event) => {
             //     sortCommentList.forEach((sortType) => {
