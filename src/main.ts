@@ -95,7 +95,13 @@ export default class Main {
                     }
                 });
                 
-        })
+            })
+
+            commentTextElem?.addEventListener('keyup', function(){
+                if(this.scrollTop > 0){
+                  this.style.height = `${this.scrollHeight}px`;
+                }
+              });
 
             // sortComment.addEventListener ("change", (event) => {
             //     sortCommentList.forEach((sortType) => {

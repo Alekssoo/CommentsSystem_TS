@@ -264,6 +264,7 @@
     border: none;
     resize: none;
     height: 61px;
+    max-height: 216px;
 }
 
 .comment:focus {
