@@ -34,12 +34,13 @@ export default class Main {
             
             let textComment  = commentTextElem?.value
             
-            if (readyComment && textComment) {
+            if (readyComment && textComment && commentTextElem) {
                 
                 comment.create(textComment)
                 comment.show(formComment, readyComment)
                 comment.clear(commentTextElem)
-                comment.checkLength(commentTextElem, button, lengthComment, submitAlert) 
+                comment.checkLength(commentTextElem, button, lengthComment, submitAlert)
+                commentTextElem.style.height = "61px" 
             }
             this.setButton(commentTextElem, button); 
         })
