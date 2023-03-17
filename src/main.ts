@@ -13,7 +13,7 @@ export default class Main {
         const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const readyComment:HTMLElement | null = document.querySelector(".comment_block")
         const sortComment:HTMLSelectElement | null = document.querySelector(".comments_params_sort")
-        const sortCommentList:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
+        // const sortCommentList:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
         // const container = document.querySelector(".comment_container")
         const commentTextElem:HTMLTextAreaElement | null = document.querySelector(".comment")
         const submitAlert:HTMLButtonElement | null = document.querySelector(".comment_submit_alarm")
@@ -25,8 +25,13 @@ export default class Main {
             // this.setButton(commentTextElem, button))
             comment.checkLength(commentTextElem, button, lengthComment, submitAlert))
         
+        commentTextElem?.addEventListener('keyup', function(){
+            if(this.scrollTop > 0){
+                this.style.height = `${this.scrollHeight}px`;
+            }
+        });
         
-        
+        this.prepareSelectSort(sortComment)
         
 
         button?.addEventListener ("click", (event) => {
@@ -45,10 +50,34 @@ export default class Main {
             this.setButton(commentTextElem, button); 
         })
 
-        
-        
 
+
+            
+
+
+        
+    }
+
+    private setButton(textArea:HTMLTextAreaElement | null, button:HTMLElement | null): void {
+        
+        let lenComment = textArea?.value?.length
+                
+                if (button) {
+                    console.log("длина введенного коммента: ", lenComment)
+                    if (!lenComment || lenComment && lenComment > 1000) {
+                        button.setAttribute('disabled', '');
+                    } else { 
+                        button.removeAttribute("disabled")
+                    }
+                }
+        
+    }
+
+    private prepareSelectSort(sortComment:HTMLSelectElement | null): void {
+        
         if (sortComment){
+            const sortCommentList:NodeListOf<Element> = sortComment.querySelectorAll("option")
+            // добавляем и убираем класс по первому(открытие) и второму клику (закрытие) 
             sortComment.addEventListener ("click", (event) => {
                 if(!sortComment.classList.contains("active")){
                     sortComment.classList.add("active")
@@ -57,9 +86,10 @@ export default class Main {
                 }
 
                 sortCommentList.forEach((sortType) => {
-                    let replacedSort = sortType.textContent?.replace(/✔ /gi, "");
-                    sortType.textContent = replacedSort || sortType.textContent
-                    console.log("на замену галочки: ", replacedSort)
+                    // и также по кликам перебираем каждый option, добавляем/убираем галочки и отступы
+                    let replacedTextOption = sortType.textContent?.replace(/✔ /gi, "");
+                    sortType.textContent = replacedTextOption || sortType.textContent
+                    // console.log("на замену галочки: ", replacedSort)
 
                     if (!sortType.classList.contains("active")) {
                         sortType.classList.add("active")
@@ -74,15 +104,19 @@ export default class Main {
 
                 })
 
+                // заменяем на галочку отступ в текущем option
+
                 if (sortComment.options[sortComment.selectedIndex] && sortComment.options[sortComment.selectedIndex].classList.contains("active")) {
                     let replacedCurrentSort = sortComment.options[sortComment.selectedIndex].textContent?.replace(/\u00A0\u00A0\u00A0\u00A0/g,"✔ ");
                 
-                    console.log("с добавленной галочкой: ", replacedCurrentSort)
+                    // console.log("с добавленной галочкой: ", replacedCurrentSort)
                     sortComment.options[sortComment.selectedIndex].textContent = replacedCurrentSort || sortComment.options[sortComment.selectedIndex].textContent;  
                 }
 
 
             })
+
+            //убираем лишнее в option также при потере фокуса с select
 
             sortComment.addEventListener("focusout", () => {
                 if(sortComment.classList.contains("active")){
@@ -98,13 +132,7 @@ export default class Main {
                 
             })
 
-            commentTextElem?.addEventListener('keyup', function(){
-                if(this.scrollTop > 0){
-                  this.style.height = `${this.scrollHeight}px`;
-                }
-              });
-
-            // sortComment.addEventListener ("change", (event) => {
+                        // sortComment.addEventListener ("change", (event) => {
             //     sortCommentList.forEach((sortType) => {
             //         let replacedSort = sortType.textContent?.replace(/✔ /gi, "");
             //         sortType.textContent = replacedSort || null
@@ -117,21 +145,8 @@ export default class Main {
             // })
 
             // sortComment.dataset.el = "✔";
-        }
-    }
 
-    private setButton(textArea:HTMLTextAreaElement | null, button:HTMLElement | null): void {
-        
-        let lenComment = textArea?.value?.length
-                
-                if (button) {
-                    console.log("длина введенного коммента: ", lenComment)
-                    if (!lenComment || lenComment && lenComment > 1000) {
-                        button.setAttribute('disabled', '');
-                    } else { 
-                        button.removeAttribute("disabled")
-                    }
-                }
+        }
         
     }
 

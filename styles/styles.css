@@ -86,7 +86,7 @@
     padding-bottom: 10px;
     line-height: 2;
     box-sizing: border-box;
-
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     /* подкчеркивание границей ниже, чем нужно, */
     /* border-bottom: 2px solid #D9D9D9; */
     /*подчеркивание с помщью тени также ниже, чем нужно, как и граница */
@@ -138,6 +138,7 @@
 
 .comments_params_wrapper {
     overflow: hidden; 
+    /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); */
 }
 
 .comments_params_sort option {
@@ -147,6 +148,7 @@
     background-repeat: no-repeat;
     background-position: center center; */
     color: #A2A2A2;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     /* opacity: 0.4; */
 }
 
