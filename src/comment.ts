@@ -101,14 +101,15 @@ export default class MyComment {
 
     private setTime(UNIC_timestamp:number): void {
         let now = new Date(UNIC_timestamp * 1000)
-        const months: Array<string> = ["Jan", "Feb", "March", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+        // const months: Array<string> = ["Jan", "Feb", "March", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
         let year = now.getFullYear();
-        let month = months[now.getMonth()]
+        // let month = months[now.getMonth()]
+        let month = (now.getMonth() >= 10 ? now.getMonth() : `0${now.getMonth()}`)
         let date = now.getDate()
-        let hour = now.getHours()
-        let min = now.getMinutes()
-        let sec = now.getSeconds()
-        let time = `${date} ${month} ${year} ${hour}:${min}:${sec}`
+        let hour = (now.getHours() >= 10 ? now.getHours() : `0${now.getHours()}`)
+        let min = (now.getMinutes() >= 10 ? now.getMinutes() : `0${now.getMinutes()}`)
+        // let sec = (now.getSeconds() >= 10 ? now.getSeconds() : `0${now.getSeconds()}`)
+        let time = `${date}.${month}.${year} ${hour}:${min}`
         this.time = time
     }
 
@@ -132,6 +133,7 @@ export default class MyComment {
                 // lengthComment.style.opacity = "1"
                 // lengthComment.classList.remove("alarm_text")
                 button.dataset.el = "Слишком длинное сообщение"
+                
                 // submitAlert.style.display = "inline-block"
                 // lengthComment.parentElement.after.
                 // lengthComment.parentElement.dataset.el = `Слишком длинное сообщение`
@@ -142,6 +144,7 @@ export default class MyComment {
                 // lengthComment.style.opacity = "0.4"
                 button.dataset.el = ""
                 lengthComment.classList.remove("alarm_text")
+                
                 // submitAlert.style.display = "none"
             }
         }

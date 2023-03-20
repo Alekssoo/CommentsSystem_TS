@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles/styles.css">
     <title>Comments</title>
 </head>
-<body>
+<body class="body">
     <form action="./" class ="comment_form">
         <!-- <label for="name">Имя</label> -->
         <!-- <input type="text" name="name" class="name"> -->
@@ -50,7 +50,8 @@
                 <div class="comment_container">
                     <div class="comment_newcontent">
                         <div class="comment_head">
-                            <label for="comment" class ="comment_username">Ник_пользователя</label>
+                            <img src="https://picsum.photos/61/61" alt="photo" class="comment_head_item comment_photo_mob">
+                            <label for="comment" class ="comment_head_item comment_username">Ник_пользователя</label>
                             <span class="comment_length opacity_text small_text"><em>Макс. 1000 символов</em></span>
                         </div>
                         <textarea required placeholder="Введите текст сообщения..." name="comment" class="comment"></textarea>

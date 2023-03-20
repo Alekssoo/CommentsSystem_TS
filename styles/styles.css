@@ -218,8 +218,12 @@
     margin-top: 0;
 }
 
-.comment_photo_img {
+.comment_photo_img, .comment_photo_mob {
     border-radius: 50px;
+}
+
+.comment_photo_mob {
+    display: none;
 }
 
 .comment_username {
@@ -307,7 +311,7 @@
     max-height: 61px;
     padding: 0;
     position: relative;
-    margin-top: 16%;
+    margin-top: 13%;
 }
 
 .comment_submit_button:enabled {
@@ -316,10 +320,12 @@
 }
 
 .comment_submit_button:disabled {
-    background-color: #A2A2A2;
+    background-color: #dfdcdc;
+    /* background-color: #A1A1A1; */
     border: none;
-    opacity: 0.4;
-    color: #000;
+    
+    /* opacity: 0.4;
+    color: #000; */
 }
 
 /* .comment_submit_alarm {
@@ -336,9 +342,8 @@
     top: -45%;
     color:#FF0000;
     opacity: 1;
-    font-style: italic;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .comment_text {
@@ -351,3 +356,104 @@
 
 
 /*цвет активной кнопки  #ABD873 верный, неактивной - #A1A1A1 ?*/
+
+@media screen and (min-width: 375px) and (max-width: 768px) {
+
+    .comment_form {
+        width: 98%;
+    }
+
+    .comments_params {
+        
+        flex-wrap: wrap;
+    }
+
+    .comments_params_item:first-child {
+        /* display: block; */
+        width: 95%;
+        margin-bottom: 19px;
+    }
+
+    .comments_params_sort:not([multiple]) {
+        margin-left: 0;
+    }
+
+    .comment_content {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .comment_photo_img {
+        display: none;
+    }
+
+    .comment_photo_mob {
+        display: inline-block;
+        margin-right: 20px;
+        max-width: 61px;
+        max-height: 61px;
+    }
+
+    .comment_head{
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    /* .comment_head_item{
+        
+    } */
+
+    .comment_username {
+        line-height: 300%;
+    }
+
+    .comment_length {
+        display: none;
+    }
+
+    .comment_container {
+        flex-direction: column;
+    }
+
+    .comment_newcontent, .comment {
+        width:99%;
+    
+    }
+
+    .comment{
+        font-size: 14px;
+    }
+
+    .comment_text {
+        font-size: 16px;
+    }
+    
+    .comment_submit {
+        width: 100%;
+    }
+
+    .comment_submit_button {
+        margin-top: 5%;
+    }
+
+    .comment_submit_button::before{
+        /* content:"Слишком длинное сообщение"; */
+        content:"";
+        margin-bottom: 35px;
+    }    
+    
+    .comment_submit_button::after{
+        /* content:"Слишком длинное сообщение"; */
+        content:"";
+        content:attr(data-el);
+        display: block;
+        position: absolute;
+        top: 105%;
+        left: 25%;
+        color:#FF0000;
+        opacity: 1;
+        font-weight: 400;
+        font-size: 12px;
+
+    }
+}
