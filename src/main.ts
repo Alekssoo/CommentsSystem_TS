@@ -12,6 +12,7 @@ export default class Main {
     public prepare():void {
         const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const readyComment:HTMLElement | null = document.querySelector(".comment_block")
+        const lenComments:HTMLElement | null = document.querySelector(".comments_params_quantity")
         const sortComment:HTMLSelectElement | null = document.querySelector(".comments_params_sort")
         // const sortCommentList:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
         // const container = document.querySelector(".comment_container")
@@ -21,6 +22,10 @@ export default class Main {
         const lengthComment:HTMLElement | null = document.querySelector(".comment_length")
         //checkButton()
         const comment = new MyComment();
+
+        // указываем общее количество комментариев на странице
+        this.prepareQuantity(lenComments, comment.elements)
+
         commentTextElem?.addEventListener("input", () =>
             // this.setButton(commentTextElem, button))
             comment.checkLength(commentTextElem, button, lengthComment))
@@ -48,11 +53,18 @@ export default class Main {
                 commentTextElem.style.height = "61px" 
             }
             this.setButton(commentTextElem, button); 
+            this.prepareQuantity(lenComments, comment.elements)
         })
 
 
 
         
+    }
+
+    private prepareQuantity(quantity:HTMLElement | null, elements:Array<any>): void {
+        if (quantity) {
+            quantity.textContent = `(${elements.length})`
+        }       
     }
 
     private setButton(textArea:HTMLTextAreaElement | null, button:HTMLElement | null): void {
@@ -73,6 +85,7 @@ export default class Main {
     private prepareSelectSort(sortComment:HTMLSelectElement | null): void {
         
         if (sortComment){
+             
             const sortCommentList:NodeListOf<Element> = sortComment.querySelectorAll("option")
             // добавляем и убираем класс по первому(открытие) и второму клику (закрытие) 
             sortComment.addEventListener ("click", (event) => {

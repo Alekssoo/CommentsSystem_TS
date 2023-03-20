@@ -59,6 +59,11 @@
     display: inline-block;
 }
 
+.comments_params_quantity{
+    color: #000;
+    opacity: 0.4;
+}
+
 .comments_params_sort {
     border: none;
     /* border-bottom: 1px solid black; */
@@ -311,7 +316,7 @@
     max-height: 61px;
     padding: 0;
     position: relative;
-    margin-top: 13%;
+    margin-top: 33px;
 }
 
 .comment_submit_button:enabled {
