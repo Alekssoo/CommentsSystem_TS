@@ -69,13 +69,13 @@ export default class MyComment {
             // и уведомление о длине, заменяем на текстовый абзац
             for (const item of newComment.childNodes) {
                 const parentBlock = item.parentElement
-                let containerElem = parentBlock?.querySelector(".comment_container")
+                let commentElem = parentBlock?.querySelector(".comment")
                 let commentLengh = parentBlock?.querySelector(".comment_length")
                 let submit = parentBlock?.querySelector(".comment_submit")
 
                 let contentElem:HTMLElement | null | undefined = parentBlock?.querySelector(".comment_content")
-                if (containerElem && contentElem && commentLengh && submit) {
-                    containerElem.remove()
+                if (commentElem && contentElem && commentLengh && submit) {
+                    commentElem.remove()
                     commentLengh.remove()
                     submit.remove()
                     contentElem.appendChild(newText)
@@ -112,16 +112,17 @@ export default class MyComment {
         this.time = time
     }
 
-    public checkLength(commentTextElem: HTMLTextAreaElement | null, button: HTMLButtonElement | null, lengthComment:HTMLElement | null, submitAlert: HTMLElement | null):void {
+    public checkLength(commentTextElem: HTMLTextAreaElement | null, button: HTMLButtonElement | null, lengthComment:HTMLElement | null):void {
         let lenComment = commentTextElem?.value?.length
         // проверка длины сообщения и 
-        if (button && lengthComment && lengthComment.parentElement && submitAlert) {
+        if (button && lengthComment && lengthComment.parentElement) {
             console.log("длина введенного коммента: ", lenComment)
             if (!lenComment) {
                 button.setAttribute('disabled', '');
                 lengthComment.textContent = "Макс. 1000 символов"
                 lengthComment.classList.remove("alarm_text")
-                submitAlert.style.display = "none"
+                // submitAlert.style.display = "none"
+                button.dataset.el = ""
             } else if (lenComment && lenComment > 1000) {
                 button.setAttribute('disabled', '');
                 lengthComment.textContent = `${lenComment}/${this.maxlength}`
@@ -129,16 +130,19 @@ export default class MyComment {
                 lengthComment.classList.add("alarm_text")
                 // lengthComment.style.color = "#FF0000"
                 // lengthComment.style.opacity = "1"
-                lengthComment.classList.remove("alarm_text")
-                submitAlert.style.display = "inline-block"
+                // lengthComment.classList.remove("alarm_text")
+                button.dataset.el = "Слишком длинное сообщение"
+                // submitAlert.style.display = "inline-block"
                 // lengthComment.parentElement.after.
                 // lengthComment.parentElement.dataset.el = `Слишком длинное сообщение`
             } else { 
                 button.removeAttribute("disabled")
                 lengthComment.textContent = `${lenComment}/${this.maxlength}`
-                lengthComment.style.color = "#000"
-                lengthComment.style.opacity = "0.4"
-                submitAlert.style.display = "none"
+                // lengthComment.style.color = "#000"
+                // lengthComment.style.opacity = "0.4"
+                button.dataset.el = ""
+                lengthComment.classList.remove("alarm_text")
+                // submitAlert.style.display = "none"
             }
         }
     }

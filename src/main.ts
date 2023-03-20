@@ -16,14 +16,14 @@ export default class Main {
         // const sortCommentList:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
         // const container = document.querySelector(".comment_container")
         const commentTextElem:HTMLTextAreaElement | null = document.querySelector(".comment")
-        const submitAlert:HTMLButtonElement | null = document.querySelector(".comment_submit_alarm")
+        // const submitAlert:HTMLButtonElement | null = document.querySelector(".comment_submit_alarm")
         const button:HTMLButtonElement | null = document.querySelector(".comment_submit_button")
         const lengthComment:HTMLElement | null = document.querySelector(".comment_length")
         //checkButton()
         const comment = new MyComment();
         commentTextElem?.addEventListener("input", () =>
             // this.setButton(commentTextElem, button))
-            comment.checkLength(commentTextElem, button, lengthComment, submitAlert))
+            comment.checkLength(commentTextElem, button, lengthComment))
         
         commentTextElem?.addEventListener('keyup', function(){
             if(this.scrollTop > 0){
@@ -44,15 +44,12 @@ export default class Main {
                 comment.create(textComment)
                 comment.show(formComment, readyComment)
                 comment.clear(commentTextElem)
-                comment.checkLength(commentTextElem, button, lengthComment, submitAlert)
+                comment.checkLength(commentTextElem, button, lengthComment)
                 commentTextElem.style.height = "61px" 
             }
             this.setButton(commentTextElem, button); 
         })
 
-
-
-            
 
 
         

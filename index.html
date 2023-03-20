@@ -45,22 +45,29 @@
                 <img src="https://picsum.photos/61/61" alt="photo" class="comment_photo_img">
             </div>
             <div class="comment_content">
-                <div class="comment_head">
-                    <label for="comment" class ="comment_username">Ник_пользователя</label>
-                    <span class="comment_length opacity_text small_text"><em>Макс. 1000 символов</em></span>
-                </div>
+
                 
                 <div class="comment_container">
-                    <textarea required placeholder="Введите текст сообщения..." name="comment" class="comment"></textarea>
-                    
+                    <div class="comment_newcontent">
+                        <div class="comment_head">
+                            <label for="comment" class ="comment_username">Ник_пользователя</label>
+                            <span class="comment_length opacity_text small_text"><em>Макс. 1000 символов</em></span>
+                        </div>
+                        <textarea required placeholder="Введите текст сообщения..." name="comment" class="comment"></textarea>
+                    </div>
+                    <div class="comment_submit">
+                
+                        <button type="submit" class="comment_submit_button" disabled>Отправить</button>
+                        <!-- <p class="comment_submit_alarm alarm_text">Слишком длинное сообщение</p> -->
+                    </div>
                     
                 </div>
             </div>
-            <div class="comment_submit">
+            <!-- <div class="comment_submit">
                 
                 <button type="submit" class="comment_submit_button" disabled>Отправить</button>
                 <p class="comment_submit_alarm alarm_text">Слишком длинное сообщение</p>
-            </div>
+            </div> -->
 
         </div>
     </form>
