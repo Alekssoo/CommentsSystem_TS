@@ -397,6 +397,9 @@
     .comment_head{
         width: 100%;
         justify-content: flex-start;
+        position: relative;
+        margin-bottom: 11px;
+        
     }
 
     /* .comment_head_item{
@@ -408,7 +411,12 @@
     }
 
     .comment_length {
-        display: none;
+        display: inline;
+        position: absolute;
+        top: 80%;
+        /* left: 67%; */
+        right: 1px;
+        font-size: 10px;
     }
 
     .comment_container {

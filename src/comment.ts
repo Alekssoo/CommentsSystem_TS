@@ -133,7 +133,6 @@ export default class MyComment {
                 // lengthComment.style.opacity = "1"
                 // lengthComment.classList.remove("alarm_text")
                 button.dataset.el = "Слишком длинное сообщение"
-                
                 // submitAlert.style.display = "inline-block"
                 // lengthComment.parentElement.after.
                 // lengthComment.parentElement.dataset.el = `Слишком длинное сообщение`
