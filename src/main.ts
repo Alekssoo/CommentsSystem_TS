@@ -2,29 +2,29 @@ import MyComment from "./comment.js";
 import User from "./user.js";
 
 export default class Main {
-    // public name: string; 
-    // public photo: string; 
     constructor() { 
-        // this.name = "";
-        // this.photo = ""; // возможно, позже сделать fetch
     }
 
     public prepare():void {
-        const formComment:HTMLElement | null = document.querySelector(".comment_form")
-        const readyComment:HTMLElement | null = document.querySelector(".comment_block")
-        const lenComments:HTMLElement | null = document.querySelector(".comments_params_quantity")
+        
+        const lenAllComments:HTMLElement | null = document.querySelector(".comments_params_quantity")
         const sortComment:HTMLSelectElement | null = document.querySelector(".comments_params_sort")
         // const sortCommentList:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
         // const container = document.querySelector(".comment_container")
+        
         const commentTextElem:HTMLTextAreaElement | null = document.querySelector(".comment")
         // const submitAlert:HTMLButtonElement | null = document.querySelector(".comment_submit_alarm")
         const button:HTMLButtonElement | null = document.querySelector(".comment_submit_button")
         const lengthComment:HTMLElement | null = document.querySelector(".comment_length")
+        
         //checkButton()
+        const user = new User();
+        this.prepareUser(user)
+        
         const comment = new MyComment();
 
         // указываем общее количество комментариев на странице
-        this.prepareQuantity(lenComments, comment.elements)
+        this.prepareQuantity(lenAllComments, comment.elements)
 
         commentTextElem?.addEventListener("input", () =>
             // this.setButton(commentTextElem, button))
@@ -37,29 +37,10 @@ export default class Main {
         });
         
         this.prepareSelectSort(sortComment)
-        
-
-        button?.addEventListener ("click", (event) => {
-            event?.preventDefault();
-            
-            let textComment  = commentTextElem?.value
-            
-            if (readyComment && textComment && commentTextElem) {
-                
-                comment.create(textComment)
-                comment.show(formComment, readyComment)
-                comment.clear(commentTextElem)
-                comment.checkLength(commentTextElem, button, lengthComment)
-                commentTextElem.style.height = "61px" 
-            }
-            this.setButton(commentTextElem, button); 
-            this.prepareQuantity(lenComments, comment.elements)
-        })
-
-
-
+        this.prepareButton(comment, user, commentTextElem, lengthComment, lenAllComments, button)
         
     }
+
 
     private prepareQuantity(quantity:HTMLElement | null, elements:Array<any>): void {
         if (quantity) {
@@ -67,20 +48,38 @@ export default class Main {
         }       
     }
 
-    private setButton(textArea:HTMLTextAreaElement | null, button:HTMLElement | null): void {
+
+    private prepareButton(comment:MyComment,user: User, textArea:HTMLTextAreaElement | null, lengthComment:HTMLElement | null, lenAllComments:HTMLElement | null, button:HTMLButtonElement | null): void {
+        const formComment:HTMLElement | null = document.querySelector(".comment_form")
+        const blockComment:HTMLElement | null = document.querySelector(".comment_block")
         
-        let lenComment = textArea?.value?.length
+        button?.addEventListener ("click", (event) => {
+            event?.preventDefault();
+            
+            let textComment  = textArea?.value
+            
+            if (blockComment && textComment && textArea) {
+                comment.create(textComment, user.name)
+                comment.show(formComment, blockComment)
+                comment.clear(textArea)
+                comment.checkLength(textArea, button, lengthComment)
+                textArea.style.height = "61px" 
+            }
+            let lenComment = textArea?.value?.length
                 
-                if (button) {
-                    console.log("длина введенного коммента: ", lenComment)
-                    if (!lenComment || lenComment && lenComment > 1000) {
-                        button.setAttribute('disabled', '');
-                    } else { 
-                        button.removeAttribute("disabled")
-                    }
+            if (button) {
+                if (!lenComment || lenComment && lenComment > comment.maxlength) {
+                    button.setAttribute('disabled', '');
+                } else { 
+                    button.removeAttribute("disabled")
                 }
+            }
+            this.prepareQuantity(lenAllComments, comment.elements)
+        })
+
         
     }
+
 
     private prepareSelectSort(sortComment:HTMLSelectElement | null): void {
         
@@ -141,37 +140,37 @@ export default class Main {
                 });
                 
             })
-
-                        // sortComment.addEventListener ("change", (event) => {
-            //     sortCommentList.forEach((sortType) => {
-            //         let replacedSort = sortType.textContent?.replace(/✔ /gi, "");
-            //         sortType.textContent = replacedSort || null
-            //     })
-            //     let currentOptionText = sortComment.options[sortComment.selectedIndex].textContent
-                    
-            //     let currentSort = "✔ " + sortComment.options[sortComment.selectedIndex].textContent;
-            //     sortComment.options[sortComment.selectedIndex].textContent = currentSort;
-                
-            // })
-
-            // sortComment.dataset.el = "✔";
-
         }
         
     }
+
+
+    private prepareUser(user:User):void {
+        const userName:HTMLElement | null = document.querySelector(".comment_username")
+        const commentPhoto:HTMLImageElement | null = document.querySelector(".comment_photo_img")
+        const commentPhotoMob:HTMLImageElement | null = document.querySelector(".comment_photo_mob")
+
+        user.create("Ivan3000")
+        if (userName) {
+            userName.textContent = user.name
+        }
+        user.addPhoto('https://picsum.photos/61/61')
+        .then(() => {
+            if (commentPhoto && commentPhotoMob) {
+                commentPhoto.src = user.photo
+                commentPhotoMob.src = user.photo
+                console.log("user.photo = ", user.photo)
+            }
+        }) .catch(() => {
+            if (commentPhoto && commentPhotoMob) {
+                commentPhoto.src = "/sources/user.png"
+                commentPhotoMob.src = "/sources/user.png"
+            }
+        })
+    } 
 
 }
 
 
 
-
-
-
-
-
-
-// const game = new Game();
-// game.prepare().then(() => {
-//     game.start()
-// })
 

@@ -1,7 +1,11 @@
 import Main from "./src/main.js";
 
 const main = new Main()
-main.prepare()
+// main.prepare().then(() => {
+       main.prepare()
+    // })
+
+
 
 // const readyComment:HTMLElement | null = document.querySelector(".comment_block")
 // const commentElem:HTMLTextAreaElement | null = document.querySelector(".comment")

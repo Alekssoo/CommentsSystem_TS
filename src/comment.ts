@@ -17,12 +17,13 @@ export default class MyComment {
         this.id = 0
     }
 
-    public create(text: string):void {
+    public create(text: string, author: string):void {
         // сначала подгружаем из localstorage массив с комментами
         // устанавливаем текущий id = его длине
         this.id = this.elements.length
         this.setTime(Math.floor(Date.now()/1000))
         this.text = text
+        this.author = author
 
         console.log("id для нового элемента равен = ", this.id)
 
@@ -117,7 +118,6 @@ export default class MyComment {
         let lenComment = commentTextElem?.value?.length
         // проверка длины сообщения и 
         if (button && lengthComment && lengthComment.parentElement) {
-            console.log("длина введенного коммента: ", lenComment)
             if (!lenComment) {
                 button.setAttribute('disabled', '');
                 lengthComment.textContent = "Макс. 1000 символов"
