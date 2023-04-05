@@ -8,48 +8,42 @@
     <title>Comments</title>
 </head>
 <body class="body">
-    <form action="./" class ="comment_form">
-        <!-- <label for="name">Имя</label> -->
-        <!-- <input type="text" name="name" class="name"> -->
-        <hr class="comments_line">
-        
+    <img src="https://picsum.photos/600/300" alt="random_img" style="max-width:95vw; object-fit:cover;">
+    <div style="max-width:95vw">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed et, nam delectus, ullam sit unde placeat asperiores laudantium eum distinctio expedita, repudiandae natus quis tempore nemo harum recusandae. Officia, nihil.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus hic repellat minus vel eos, similique maiores magnam, recusandae numquam sed rem nesciunt et asperiores, officia libero. Ab sed excepturi quidem?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates nisi consequuntur, impedit, quo cupiditate sed magni minima explicabo sapiente temporibus voluptatum doloremque consectetur nam. Ab fugiat vel a exercitationem harum?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia ratione aperiam consequuntur assumenda! Labore, iste non vitae commodi optio deleniti ullam quod tenetur accusamus exercitationem neque sunt, dignissimos illo quos.</p>
+    </div>
+    
+
+
+    <!-- <form action="./" class ="comment_form">
+        <hr class="comments_line">   
         <div class="comments">
-            
-            
             <ul class="comments_params">
                 <li class="comments_params_item "><span class="comments_params_main">Комментарии <span class="comments_params_quantity"></span></span> </li>
                 <li class="comments_params_item">
-                    <!-- <a href="" class="comments_params_link opacity_text"> -->
                         <div class="comments_params_wrapper">
-                        
                             <select class="comments_params_sort opacity_text">
                                 <option value="date" class="comments_sort_item">По дате</option>
                                 <option value="ratings" class="comments_sort_item" selected>По количеству оценок</option>
                                 <option value="actual" class="comments_sort_item">По актуальности</option>
                                 <option value="answers" class="comments_sort_item">По количеству ответов</option>
-                            <!-- </a> -->
                             </select>
-                        
                         </div>
-
                 </li>
                 <li class="comments_params_item"><a href="" class="comments_params_link opacity_text small_text">Избранное</a></ul>
             </ul>
-            <!-- <span class="comments_quantity">Комментарии</span>
-            <span class="comments_sort">По количеству оценок</span>
-            <span class="comments_favorites">Избранное</span> -->
         </div>
-        <span></span>
         <div class="comment_block">
             <div class="comment_photo">
                 <img src="/sources/user.png" width="61" height="61" alt="user_photo" class="comment_photo_img">
             </div>
             <div class="comment_content">
-
-                
                 <div class="comment_container">
-                    <div class="comment_newcontent">
-                        <div class="comment_head">
+                    <div class="comment_main">
+                        <div class="comment_main_head">
                             <img src="/sources/user.png" width="61" height="61" alt="user_photo" class="comment_head_item comment_photo_mob">
                             <label for="comment" class ="comment_head_item comment_username">Ник_пользователя</label>
                             <span class="comment_length opacity_text small_text"><em>Макс. 1000 символов</em></span>
@@ -59,19 +53,11 @@
                     <div class="comment_submit">
                 
                         <button type="submit" class="comment_submit_button" disabled>Отправить</button>
-                        <!-- <p class="comment_submit_alarm alarm_text">Слишком длинное сообщение</p> -->
                     </div>
-                    
                 </div>
             </div>
-            <!-- <div class="comment_submit">
-                
-                <button type="submit" class="comment_submit_button" disabled>Отправить</button>
-                <p class="comment_submit_alarm alarm_text">Слишком длинное сообщение</p>
-            </div> -->
-
         </div>
-    </form>
+    </form> -->
     <script src="index.js" type="module"></script>
 </body>
 </html>

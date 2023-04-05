@@ -258,7 +258,7 @@
     
 }
 
-.comment_head {
+.comment_main_head {
     display: flex;
     justify-content: space-between;
     width: 95%;
@@ -296,7 +296,7 @@
     outline: none;
 }
 
-.comment_newcontent {
+.comment_main {
     width: 70%;
 }
 
@@ -398,8 +398,12 @@
         max-width: 61px;
         max-height: 61px;
     }
+    
+    .comment_main {
+        width: 100%;
+    }
 
-    .comment_head{
+    .comment_main_head{
         width: 100%;
         justify-content: flex-start;
         position: relative;
@@ -428,9 +432,8 @@
         flex-direction: column;
     }
 
-    .comment_newcontent, .comment {
-        width:99%;
-    
+    .comment {
+        width: 99%;
     }
 
     .comment{
