@@ -24,7 +24,7 @@ export default class Main {
         const user = new User();
         const comment = new MyComment();
 
-        this.prepareUsers(user, comment, formComment, blockComment)
+        this.prepareUsers(user, comment, formComment, blockComment, lenAllComments)
 
         commentTextElem?.addEventListener("input", () =>
             // this.setButton(commentTextElem, button))
@@ -48,6 +48,15 @@ export default class Main {
                 this.prepareQuantity(lenAllComments, comment.elements)
             }
         });
+
+        // document.addEventListener("load", () => {
+        //     if (blockComment) {
+        //         // Подгружаем все комменты после загрузки пользователей
+        //         comment.show(formComment, blockComment, user.accounts)
+        //         // указываем общее количество комментариев на странице
+        //         this.prepareQuantity(lenAllComments, comment.elements)
+        //     }
+        // });
     }
 
     prepareForm(container:HTMLElement):void {
@@ -77,7 +86,7 @@ export default class Main {
         let commentMain = `
             <div class="comment_main">
                 <div class="comment_main_head">
-                    <img src="/sources/user.png" width="61" height="61" alt="user_photo" class="comment_head_item comment_photo_mob">
+                    <img src="/sources/user.png" width="50" height="50" alt="user_photo" class="comment_head_item comment_photo_mob">
                     <label for="comment" class ="comment_head_item comment_username">Ник_пользователя</label>
                     <span class="comment_length opacity_text small_text"><em>Макс. 1000 символов</em></span>
                 </div>
@@ -207,7 +216,7 @@ export default class Main {
         
     }
 
-    private prepareUsers(user:User, comment:MyComment, formComment:HTMLElement | null, blockComment:HTMLElement | null):void {
+    private prepareUsers(user:User, comment:MyComment, formComment:HTMLElement | null, blockComment:HTMLElement | null, lenAllComments:HTMLElement | null):void {
         const userName:HTMLElement | null = document.querySelector(".comment_username")
         const commentPhoto:HTMLImageElement | null = document.querySelector(".comment_photo_img")
         const commentPhotoMob:HTMLImageElement | null = document.querySelector(".comment_photo_mob")
@@ -225,7 +234,7 @@ export default class Main {
                     console.log("user.photo = ", user.photo)
             }
             
-            this.prepareComments(user, comment, formComment, blockComment)
+            this.prepareComments(user, comment, formComment, blockComment, lenAllComments)
 
         }) .catch(() => {
             if (commentPhoto && commentPhotoMob) {
@@ -236,13 +245,14 @@ export default class Main {
 
     } 
 
-    private prepareComments(user:User, comment:MyComment, formComment:HTMLElement | null, blockComment:HTMLElement | null):void {
+    private prepareComments(user:User, comment:MyComment, formComment:HTMLElement | null, blockComment:HTMLElement | null, quantity:HTMLElement | null):void {
         //создаем и публикуем комментарии других пользователей
         user.accounts.forEach ((account) => {
             comment.create(`textComment`, account.name)
         })
 
         comment.show(formComment, blockComment, user.accounts)
+        this.prepareQuantity(quantity, comment.elements)
     }
 
 }

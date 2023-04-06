@@ -1,9 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
+.html {
+    overflow-x: hidden;
+}
+
+.body {
+    margin: 0 auto;
+    max-width: 95vw;
+    overflow-x: hidden;
+}
+
 .comment_form {
     display: flex;
     flex-direction: column;
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
     font-family: 'Inter', sans-serif;
     font-size: 18px;
@@ -395,8 +405,8 @@
     .comment_photo_mob {
         display: inline-block;
         margin-right: 20px;
-        max-width: 61px;
-        max-height: 61px;
+        max-width: 50px;
+        max-height: 50px;
     }
     
     .comment_main {
@@ -438,6 +448,24 @@
 
     .comment{
         font-size: 14px;
+    }
+
+   .comment_ready_username {
+        /* display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: nowrap; */
+        position: relative;
+        width:95%
+    }
+
+    .comment_ready_username::after {
+        /* display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: nowrap; */
+        position: absolute;
+        right: 0;
     }
 
     .comment_text {
