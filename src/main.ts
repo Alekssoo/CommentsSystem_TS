@@ -248,7 +248,7 @@ export default class Main {
     private prepareComments(user:User, comment:MyComment, formComment:HTMLElement | null, blockComment:HTMLElement | null, quantity:HTMLElement | null):void {
         //создаем и публикуем комментарии других пользователей
         user.accounts.forEach ((account) => {
-            comment.create(`textComment`, account.name)
+            comment.create(comment.prepareText(), account.name)
         })
 
         comment.show(formComment, blockComment, user.accounts)
