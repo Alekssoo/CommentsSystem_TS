@@ -1,4 +1,5 @@
 import MyComment from "./comment.js";
+import Answer from "./answer.js";
 import User from "./user.js";
 
 export default class Main {
@@ -23,6 +24,7 @@ export default class Main {
         
         const user = new User();
         const comment = new MyComment();
+        const answer = new Answer();
 
         this.prepareUsers(user, comment, formComment, blockComment, lenAllComments)
 
@@ -30,7 +32,7 @@ export default class Main {
             // this.setButton(commentTextElem, button))
             comment.checkLength(commentTextElem, button, lengthComment))
         
-        commentTextElem?.addEventListener('keyup', function(){
+        commentTextElem?.addEventListener('keyup', function() {
             if(this.scrollTop > 0){
                 this.style.height = `${this.scrollHeight}px`;
             }
@@ -46,6 +48,8 @@ export default class Main {
                 comment.show(formComment, blockComment, user.accounts)
                 // указываем общее количество комментариев на странице
                 this.prepareQuantity(lenAllComments, comment.elements)
+
+                // answer.prepare(blockComment)
             }
         });
 
@@ -73,7 +77,7 @@ export default class Main {
         let params = `
             <div class="comments">
                 <ul class="comments_params">
-                    <li class="comments_params_item ">
+                    <li class="comments_params_item">
                         <span class="comments_params_main">Комментарии <span class="comments_params_quantity"></span></span>
                     </li>
                     <li class="comments_params_item">
@@ -104,7 +108,7 @@ export default class Main {
             <form action="./" class ="comment_form">
                 <hr class="comments_line">
                 ${params}
-                <div class="comment_block">
+                <div class="comment_block" id="input_block">
                     <div class="comment_photo">
                         <img src="/sources/user.png" width="61" height="61" alt="user_photo" class="comment_photo_img">
                     </div>
@@ -114,6 +118,7 @@ export default class Main {
                             ${commentSubmit}
                         </div>
                     </div>
+                    
                 </div>
             </form>`
     }
@@ -247,9 +252,15 @@ export default class Main {
 
     private prepareComments(user:User, comment:MyComment, formComment:HTMLElement | null, blockComment:HTMLElement | null, quantity:HTMLElement | null):void {
         //создаем и публикуем комментарии других пользователей
-        user.accounts.forEach ((account) => {
-            comment.create(comment.prepareText(), account.name)
-        })
+        // для примера ограничимся максимум 50-ю ком-ми
+        
+        for (let account of user.accounts) {
+            if (comment.elements.length < 50) {
+                comment.create(comment.prepareText(), account.name)
+            } else {
+                break
+            }
+        }
 
         comment.show(formComment, blockComment, user.accounts)
         this.prepareQuantity(quantity, comment.elements)

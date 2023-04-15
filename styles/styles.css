@@ -361,13 +361,30 @@
     font-size: 13px;
 }
 
+.comment_answer_link {
+    text-decoration: none;
+    font-size: 18px;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* .comment_answer_button:before {
+    background-color: transparent;
+    border: none;
+} */
+
 .comment_text {
     /* font-family: 'Inter', sans-serif;
     font-size: 18px;
     line-height: 22px; */
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 15px;
 }
+
+.answer_input_block {
+    width:90%;
+    margin-left: 15%;
+}  
 
 
 /*цвет активной кнопки  #ABD873 верный, неактивной - #A1A1A1 ?*/
@@ -442,11 +459,8 @@
         flex-direction: column;
     }
 
-    .comment {
-        width: 99%;
-    }
-
     .comment{
+        width: 99%;
         font-size: 14px;
     }
 
@@ -468,7 +482,7 @@
         right: 0;
     }
 
-    .comment_text {
+    .comment_text, .comment_answer_link {
         font-size: 16px;
     }
     
