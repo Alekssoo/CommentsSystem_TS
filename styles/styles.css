@@ -361,8 +361,14 @@
     font-size: 13px;
 }
 
-.comment_answer_link {
-    text-decoration: none;
+.answer_submit_button {
+    width: 90%;
+}
+
+.comment_answer_button {
+    /* text-decoration: none; */
+    background-color: transparent;
+    border: none;
     font-size: 18px;
     margin-left: 0;
     padding-left: 0;
@@ -383,7 +389,7 @@
 
 .answer_input_block {
     width:90%;
-    margin-left: 15%;
+    margin-left: 12%;
 }  
 
 

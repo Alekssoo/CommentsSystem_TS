@@ -32,17 +32,40 @@ export default class Answer extends MyComment {
         console.log(`создали ответ с id = ${this.id}`)
     }
 
-    public show(form: HTMLElement | null, readyComment: HTMLElement | null, accounts: any[]): void {
+   
+
+    public prepare(parentBlock:Element, inputBlockComment:Element | null) {
+        if (!inputBlockComment) {return}
+        // let parentComment = document.getElementById(idParent)
+        let newAnswerInputBlock = document.createElement("div")
+        // newAnswerInputBlock.outerHTML = inputBlockComment.outerHTML
+        
+        
+        
+        newAnswerInputBlock.classList.add("comment_block", "answer_input_block")
+        newAnswerInputBlock.innerHTML =  inputBlockComment.innerHTML;
+        // console.log(newAnswerInputBlock)
+        let answerButton = newAnswerInputBlock.querySelector(".comment_submit_button")
+        if (answerButton) {
+            answerButton.classList.add("answer_submit_button")
+        }
+
+        let answerTextElem = newAnswerInputBlock.querySelector(".comment")
+        if (answerTextElem) {
+            answerTextElem.classList.add("answer_input")
+        }
+
+        
+
+        if (parentBlock) {
+            parentBlock.insertAdjacentHTML('afterend', newAnswerInputBlock.outerHTML);
+        }
+
+
         
     }
 
-    public prepare(inputBlockComment:HTMLElement | null) {
-        if (!inputBlockComment) {return}
-        let newAnswerInputBlock = document.createElement("div")
-        newAnswerInputBlock.outerHTML = inputBlockComment.outerHTML
+    public show(form: HTMLElement | null, readyComment: HTMLElement | null, accounts: any[]): void {
         
-        newAnswerInputBlock.classList.add("answer_input_block")
-        
-        console.log(newAnswerInputBlock)
     }
 }

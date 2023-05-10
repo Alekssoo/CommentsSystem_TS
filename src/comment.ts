@@ -116,14 +116,16 @@ export default class MyComment {
             }
             let newText = document.createElement("p");
             let bottomComment = document.createElement("div");
-            let ansLink:HTMLAnchorElement = document.createElement("a");
+            let ansButton:HTMLButtonElement = document.createElement("button");
             newText.textContent = comment.text
             newText.classList.add("comment_text")
             bottomComment.classList.add("comment_bottom")
-            ansLink.href = "#input_block"
-            ansLink.classList.add("comment_answer_link", "opacity_text")
+            // ansLink.href = "#input_block"
             
-            ansLink.innerHTML += `
+            ansButton.classList.add("comment_answer_button", "opacity_text")
+            ansButton.type = "button"
+            
+            ansButton.innerHTML += `
                 <div style="display:flex; align-items:flex-end">
                 <svg width='26' height='25' id='svg7384' xmlns:osb='http://www.openswatchbook.org/uri/2009/osb' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns='http://www.w3.org/2000/svg' viewBox="0 0 14 14" style="margin-right:10px">
                     <g id='layer12' style='display:inline' transform='translate(-265.00039,-60.996639)'>
@@ -160,17 +162,11 @@ export default class MyComment {
             //клонируем и переделываем контэйнер с комментарием для показа
             let newReadyCommentBlock = document.createElement("div")
             newReadyCommentBlock.classList.add("comment_block")
-            // form.appendChild(newReadyCommentBlock)
             newReadyCommentBlock.insertAdjacentHTML('afterbegin', inputBlockComment.innerHTML);
-            // newReadyCommentWrapper.outerHTML = inputBlockComment.outerHTML
-            console.log(newReadyCommentBlock)
-            // let newComment = inputBlockComment.cloneNode(true)
             
             // определяем и удаляем: блок для ввода,отправки из введ-го коммента 
             // и уведомление о длине, заменяем на текстовый абзац
-            // for (const item of newComment.childNodes) {
-                // const parentBlock = item.parentElement
-                // if (!parentBlock) {return}
+
                 newReadyCommentBlock.id = `${comment.id}`
                 let commentElem = newReadyCommentBlock.querySelector(".comment")
                 let commentLengh = newReadyCommentBlock.querySelector(".comment_length")
@@ -184,7 +180,7 @@ export default class MyComment {
                     commentLengh.remove()
                     submit.remove()
                     contentElem.appendChild(newText)
-                    bottomComment.appendChild(ansLink)
+                    bottomComment.appendChild(ansButton)
                     contentElem.appendChild(bottomComment)
 
                     // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
@@ -198,7 +194,7 @@ export default class MyComment {
                     }
 
                     for (const account of accounts) {
-                        console.log("зашли в цикл по массиву аккаунтов")
+                        // console.log("зашли в цикл по массиву аккаунтов")
                         if ((account.name === comment.author) && commentPhoto && commentPhotoMob) {
                             // console.log("условие для присвоения ресурса с фото выполнено")
                             commentPhoto.src = account.photo
@@ -206,55 +202,10 @@ export default class MyComment {
                             break
                         }
                     }
-                    
-                    // break
-                // }
-
-
-            // for (const item of newComment.childNodes) {
-            //     const parentBlock = item.parentElement
-            //     if (!parentBlock) {return}
-            //     parentBlock.id = `${comment.id}`
-            //     let commentElem = parentBlock.querySelector(".comment")
-            //     let commentLengh = parentBlock.querySelector(".comment_length")
-            //     let submit = parentBlock.querySelector(".comment_submit")
-            //     let commentPhoto:HTMLImageElement | null = parentBlock.querySelector(".comment_photo_img")
-            //     let commentPhotoMob:HTMLImageElement | null = parentBlock.querySelector(".comment_photo_mob")
-            //     let contentElem:Element | null = parentBlock.querySelector(".comment_content")
-                
-            //     if (commentElem && contentElem && commentLengh && submit) {
-            //         commentElem.remove()
-            //         commentLengh.remove()
-            //         submit.remove()
-            //         contentElem.appendChild(newText)
-            //         bottomComment.appendChild(ansLink)
-            //         contentElem.appendChild(bottomComment)
-
-            //         // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
-            //         const labelName:HTMLLabelElement | null = contentElem.querySelector(".comment_username");
-                    
-            //         if (labelName) {
-            //             labelName.classList.add("comment_ready_username")
-            //             labelName.htmlFor = "commentReadyText"
-            //             labelName.dataset.el = comment.time
-            //             labelName.textContent = comment.author
-            //         }
-
-            //         for (const account of accounts) {
-            //             console.log("зашли в цикл по массиву аккаунтов")
-            //             if ((account.name === comment.author) && commentPhoto && commentPhotoMob) {
-            //                 // console.log("условие для присвоения ресурса с фото выполнено")
-            //                 commentPhoto.src = account.photo
-            //                 commentPhotoMob.src = account.photo
-            //                 break
-            //             }
-            //         }
-                    
-            //         break
-            //     }
             }
             // и добавляем получившийся итоговый блок в форму
-            form.appendChild(newReadyCommentBlock)
+            // form.appendChild(newReadyCommentBlock)
+            inputBlockComment.insertAdjacentHTML('afterend', newReadyCommentBlock.outerHTML);
         }
     }
 
@@ -269,26 +220,29 @@ export default class MyComment {
         this.time = time
     }
 
-    public checkLength(commentTextElem: HTMLTextAreaElement | null, button: HTMLButtonElement | null, lengthComment:HTMLElement | null):void {
+    public checkLength(commentTextElem: HTMLTextAreaElement | null, button: HTMLButtonElement | null, lengthCommentElem:HTMLElement | null):void {
         let lenComment = commentTextElem?.value?.length
-        // проверка длины сообщения
-        if (button && lengthComment && lengthComment.parentElement) {
+        // проверка длины сообщения => изменение кнопки и сообщения над ней
+        if (button && lengthCommentElem && lengthCommentElem.parentElement) {
             if (!lenComment) {
+                console.log("длина текст = 0, отключаем кнопку")
                 button.setAttribute('disabled', '');
-                lengthComment.textContent = "Макс. 1000 символов"
-                lengthComment.classList.remove("alarm_text")
+                lengthCommentElem.textContent = "Макс. 1000 символов"
+                lengthCommentElem.classList.remove("alarm_text")
                 button.dataset.el = ""
             } else if (lenComment && lenComment > 1000) {
+                console.log("длина текста > 1000, отключаем кнопку")
                 button.setAttribute('disabled', '');
-                lengthComment.textContent = `${lenComment}/${this.maxlength}`
-                lengthComment.classList.add("alarm_text")
+                lengthCommentElem.textContent = `${lenComment}/${this.maxlength}`
+                lengthCommentElem.classList.add("alarm_text")
                 button.dataset.el = "Слишком длинное сообщение"
 
             } else { 
+                console.log("длина текста в норме, включаем кнопку")
                 button.removeAttribute("disabled")
-                lengthComment.textContent = `${lenComment}/${this.maxlength}`
+                lengthCommentElem.textContent = `${lenComment}/${this.maxlength}`
                 button.dataset.el = ""
-                lengthComment.classList.remove("alarm_text")
+                lengthCommentElem.classList.remove("alarm_text")
             }
         }
     }
@@ -305,7 +259,7 @@ export default class MyComment {
     }
 
     public prepareText():string {
-        // метод для генерации текста комментариев
+        // метод для генерации текста "чужих" комментариев
         const text = []
         text.push(`Называть проект Молочникова, в котором играют прекрасные Янковский и Эйдельштейн,
          'сериалом с блогерами' - это реально несправедливо`)

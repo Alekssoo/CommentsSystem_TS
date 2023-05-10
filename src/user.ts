@@ -37,7 +37,7 @@ export default class User {
 
 
     // public async create(name:string, photo:string):Promise<string | void> {
-        public async create(url:string):Promise<string | void> {
+    public async create(url:string):Promise<string | void> {
         this.load()
 
         let that = this
@@ -46,13 +46,22 @@ export default class User {
             .then(function(data) {
             let users = data.results;
             users.forEach((user:any) => {
-                that.addName(user.login.username);
-                that.addPhoto(user.picture.medium)
-
-                that.accounts.push({
-                    name:that.name,
-                    photo:that.photo})
-                console.log("создали нового пользователя")
+                // искусственно ограничимся 49 пользователями
+                if ((that.accounts.length) <= 49) {
+                    that.addName(user.login.username);
+                    that.addPhoto(user.picture.medium)
+                
+                    
+                
+                    that.accounts.push({
+                        name:that.name,
+                        photo:that.photo})
+                    console.log("создали нового пользователя")
+                } else {
+                    that.addName(that.accounts[that.accounts.length-1].name);
+                    that.addPhoto(that.accounts[that.accounts.length-1].photo)
+                }
+                
                 //сохраняем нового пользователя
                 localStorage.setItem("accounts", JSON.stringify(that.accounts))
             })

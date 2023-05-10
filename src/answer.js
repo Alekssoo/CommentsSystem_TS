@@ -21,15 +21,28 @@ export default class Answer extends MyComment {
         this.save();
         console.log(`создали ответ с id = ${this.id}`);
     }
-    show(form, readyComment, accounts) {
-    }
-    prepare(inputBlockComment) {
+    prepare(parentBlock, inputBlockComment) {
         if (!inputBlockComment) {
             return;
         }
+        // let parentComment = document.getElementById(idParent)
         let newAnswerInputBlock = document.createElement("div");
-        newAnswerInputBlock.outerHTML = inputBlockComment.outerHTML;
-        newAnswerInputBlock.classList.add("answer_input_block");
-        console.log(newAnswerInputBlock);
+        // newAnswerInputBlock.outerHTML = inputBlockComment.outerHTML
+        newAnswerInputBlock.classList.add("comment_block", "answer_input_block");
+        newAnswerInputBlock.innerHTML = inputBlockComment.innerHTML;
+        // console.log(newAnswerInputBlock)
+        let answerButton = newAnswerInputBlock.querySelector(".comment_submit_button");
+        if (answerButton) {
+            answerButton.classList.add("answer_submit_button");
+        }
+        let answerTextElem = newAnswerInputBlock.querySelector(".comment");
+        if (answerTextElem) {
+            answerTextElem.classList.add("answer_input");
+        }
+        if (parentBlock) {
+            parentBlock.insertAdjacentHTML('afterend', newAnswerInputBlock.outerHTML);
+        }
+    }
+    show(form, readyComment, accounts) {
     }
 }
