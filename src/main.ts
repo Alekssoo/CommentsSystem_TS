@@ -199,11 +199,19 @@ export default class Main {
             let textComment  = textArea?.value
             
             if (blockComment && textComment && textArea) {
-                comment.create(textComment, user.name)
-                comment.show(formComment, blockComment, user.accounts)
-                comment.clear(textArea)
-                comment.checkLength(textArea, button, lengthTextElem)
-                textArea.style.height = "61px" 
+                
+
+                if (button.classList.contains("answer_submit_button")) {
+                    answer.create(textComment, user.name)
+                    answer.show(formComment, blockComment, user.accounts)
+                    // blockComment.remove()
+                } else {
+                    comment.create(textComment, user.name)
+                    comment.show(formComment, blockComment, user.accounts)
+                    comment.clear(textArea)
+                    comment.checkLength(textArea, button, lengthTextElem)
+                    textArea.style.height = "61px" 
+                }
             }
 
             //меняем состояние кнопки в зависимости от длины введенного текста польз-м
@@ -357,64 +365,37 @@ export default class Main {
                     // если блок ввода ответа на коммента уже существует, завершаем, не создавая новый
                     if (document.querySelector(".answer_input_block")) {return}
 
-                    answer.prepare(block, blockComment)
+                    answer.prepareInputBlock(block, blockComment)
                     
                     const answerInputBlock = document.querySelector(".answer_input_block")
                     if (!answerInputBlock) {
-                        console.log("Нет блока ввода коммента в искомом блоке")
+                        // console.log("Нет блока ввода коммента в искомом блоке")
                         return;
                     }
 
-                    console.log("Нашли блок ввода коммента в искомом блоке: ", answerInputBlock)
+                    // console.log("Нашли блок ввода коммента в искомом блоке: ", answerInputBlock)
 
                     const textArea:HTMLTextAreaElement | null  = answerInputBlock.querySelector(".answer_input")
                     const answerSubmitButton:HTMLButtonElement | null = answerInputBlock.querySelector(".answer_submit_button")
                     if (!answerSubmitButton) {
-                        console.log("Нет кнопки, не заходим в обработку клика")
+                        // console.log("Нет кнопки, не заходим в обработку клика")
                         return;
                     }
 
                     const lengthAnswerElem:HTMLElement | null = answerInputBlock.querySelector(".comment_length")
-                    if (!lengthAnswerElem) {
-                        console.log("Нет элемента с длиной ответа")
+                    // if (!lengthAnswerElem) {
+                    //     console.log("Нет элемента с длиной ответа")
          
-                    }
+                    // }
 
-                    console.log("Нашли кнопку в блоке ответа: ", answerSubmitButton)
-                    console.log("Нашли textArea в форме ответа: ", textArea)
+                    // console.log("Нашли кнопку в блоке ответа: ", answerSubmitButton)
+                    // console.log("Нашли textArea в форме ответа: ", textArea)
 
                     // let textComment  = textArea?.value
 
                     this.prepareButton(formComment, blockComment, comment, user, answer, textArea, lengthAnswerElem, lenAllComments, answerSubmitButton)
 
-                    // answerSubmitButton.addEventListener ("click", (event) => {
-                    //     event?.preventDefault();
-                    //     console.log("заходим в обработку клика")
-                        
-        
-                    //     if (blockComment && textComment && textArea) {
-                    //         answer.create(textComment, user.name)
-                    //         textArea.style.height = "61px" 
-                    //     }
-            
-                    //     //меняем состояние кнопки в зависимости от длины введенного текста польз-м
-                    //     let lenComment = textArea?.value?.length
-                            
-                    //     if (!lenComment || lenComment && lenComment > answer.maxlength) {
-                    //         answerSubmitButton.setAttribute('disabled', '');
-                    //         console.log("блокируем кнопку")
-                    //     } else { 
-                    //         answerSubmitButton.removeAttribute("disabled")
-                    //         console.log("разблокируем кнопку")
-                    //     }
-
-                    //     this.prepareQuantity(lenAllComments, comment.elements)
-            
-                    //     this.prepareAnswers(answer, user, comment, blockComment, lenAllComments)
-
-                        
-
-                    // })
+                    
 
                     this.prepareInputElem(answer, textArea, blockComment, answerSubmitButton, lengthAnswerElem)
                 }
@@ -422,38 +403,6 @@ export default class Main {
                 commentAnswerButton.addEventListener("click", () => {
                     commentAnswerButton.removeEventListener("click", prepareAnswerInputForm)
                 })
-                // подготовка реакции кнопки в форме ответа на нажатие, ввод и т.п. 
-
-                // const answerSubmitButton = block.querySelector(".answer_submit_button")
-                // if (!answerSubmitButton) {
-                //     console.log("Нет кнопки, не заходим в обработку клика")
-                //     return;
-                
-                // }
-
-                // answerSubmitButton.addEventListener ("click", (event) => {
-                //     event?.preventDefault();
-                //     console.log("заходим в обработку клика")
-                //     let textComment  = textArea?.value
-    
-                //     if (blockComment && textComment && textArea) {
-                //         answer.create(textComment, user.name)
-                //         textArea.style.height = "61px" 
-                //     }
-        
-                //     //меняем состояние кнопки в зависимости от длины введенного текста польз-м
-                //     let lenComment = textArea?.value?.length
-                        
-                //     if (!lenComment || lenComment && lenComment > answer.maxlength) {
-                //         answerSubmitButton.setAttribute('disabled', '');
-                //     } else { 
-                //         answerSubmitButton.removeAttribute("disabled")
-                //     }
-
-                //     this.prepareQuantity(lenAllComments, comment.elements)
-        
-                //     this.prepareAnswers(answer, user, comment, blockComment, lenAllComments)
-                
 
             }
 

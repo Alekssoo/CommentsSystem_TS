@@ -109,18 +109,19 @@ export default class MyComment {
 
         this.load()
         // создаем новый абзац из отправленного комментария
-        
+        // и добавляем подвал для готового коммента
         for (const comment of this.elements) {
+            //чтобы не дублировались опубликованные комменты:
             if (document.getElementById(`${comment.id}`)) {
                 continue
             }
+
             let newText = document.createElement("p");
             let bottomComment = document.createElement("div");
             let ansButton:HTMLButtonElement = document.createElement("button");
             newText.textContent = comment.text
             newText.classList.add("comment_text")
             bottomComment.classList.add("comment_bottom")
-            // ansLink.href = "#input_block"
             
             ansButton.classList.add("comment_answer_button", "opacity_text")
             ansButton.type = "button"
@@ -135,29 +136,7 @@ export default class MyComment {
                 
                 Ответить</div>`
 
-            // ansButton.innerHTML += `
-            // <svg width='26' height='25' id='svg7384' xmlns:osb='http://www.openswatchbook.org/uri/2009/osb' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns='http://www.w3.org/2000/svg' viewBox="0 0 16 16">
-            //     <g id='layer12' inkscape:label='actions' style='display:inline' transform='translate(-265.00039,-60.996639)'>
-            //         <path d='m 272.0004,62.5 -6.46875,4.5 6.46875,4.5 0,-2.5 2,0 c 1.36491,0 2.5716,0.87335 2.9375,2 0.43763,1.34754 -1.4375,4 -1.4375,4 0,0 4,-1.5 4,-4.75 0,-3.12352 -2,-5.25 -5,-5.25 l -2.5,0 z' id='path4400-3' sodipodi:nodetypes='ccccsscsscc' style='color:#bebebe;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;opacity:0.5;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0;marker:none;enable-background:accumulate'/>
-            //     </g>
-            // </svg>
-            // Ответить`
-
-            // ansButton.innerHTML += `
-            // <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            //     width="26px" height="25px" viewBox="0 0 634.975 634.975"
-            //     xml:space="preserve">
-            //     <path d="M283.123,159.091V25.423c0.771-6.686-1.065-13.598-6.232-18.743c-8.975-8.907-23.524-8.907-32.5,0L18.03,254.889
-            //         c-4.782,4.759-6.822,11.06-6.504,17.292c-0.317,6.232,1.722,12.533,6.504,17.292l225.137,246.849
-            //         c8.408,7.184,23.819,11.264,33.746,1.359c5.145-5.145,7.388-9.473,6.618-16.158c0,0,0-122.586,0-135.98
-            //         c149.578,0,284.855,107.695,311.711,249.432c18.085-41.564,28.238-87.344,28.238-135.572
-            //         C623.48,311.457,471.093,159.091,283.123,159.091z"/>
-            // </svg>
-            // Ответить`
-
-
-            // ansButton.textContent += "Ответить"
-            newText.id = "commentReadyText"
+            newText.id = `commentReadyText_${comment.id}`
             
             //клонируем и переделываем контэйнер с комментарием для показа
             let newReadyCommentBlock = document.createElement("div")
@@ -165,43 +144,43 @@ export default class MyComment {
             newReadyCommentBlock.insertAdjacentHTML('afterbegin', inputBlockComment.innerHTML);
             
             // определяем и удаляем: блок для ввода,отправки из введ-го коммента 
-            // и уведомление о длине, заменяем на текстовый абзац
+            // и уведомление о длине, заменяем на наполнение готового комментария
 
-                newReadyCommentBlock.id = `${comment.id}`
-                let commentElem = newReadyCommentBlock.querySelector(".comment")
-                let commentLengh = newReadyCommentBlock.querySelector(".comment_length")
-                let submit = newReadyCommentBlock.querySelector(".comment_submit")
-                let commentPhoto:HTMLImageElement | null = newReadyCommentBlock.querySelector(".comment_photo_img")
-                let commentPhotoMob:HTMLImageElement | null = newReadyCommentBlock.querySelector(".comment_photo_mob")
-                let contentElem:Element | null = newReadyCommentBlock.querySelector(".comment_content")
+            newReadyCommentBlock.id = `${comment.id}`
+            let commentTextElem = newReadyCommentBlock.querySelector(".comment")
+            let commentLengh = newReadyCommentBlock.querySelector(".comment_length")
+            let submit = newReadyCommentBlock.querySelector(".comment_submit")
+            let commentPhoto:HTMLImageElement | null = newReadyCommentBlock.querySelector(".comment_photo_img")
+            let commentPhotoMob:HTMLImageElement | null = newReadyCommentBlock.querySelector(".comment_photo_mob")
+            let contentElem:Element | null = newReadyCommentBlock.querySelector(".comment_content")
+            
+            if (commentTextElem && contentElem && commentLengh && submit) {
+                commentTextElem.remove()
+                commentLengh.remove()
+                submit.remove()
+                contentElem.appendChild(newText)
+                bottomComment.appendChild(ansButton)
+                contentElem.appendChild(bottomComment)
+
+                // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
+                const labelName:HTMLLabelElement | null = contentElem.querySelector(".comment_username");
                 
-                if (commentElem && contentElem && commentLengh && submit) {
-                    commentElem.remove()
-                    commentLengh.remove()
-                    submit.remove()
-                    contentElem.appendChild(newText)
-                    bottomComment.appendChild(ansButton)
-                    contentElem.appendChild(bottomComment)
-
-                    // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
-                    const labelName:HTMLLabelElement | null = contentElem.querySelector(".comment_username");
-                    
-                    if (labelName) {
-                        labelName.classList.add("comment_ready_username")
-                        labelName.htmlFor = "commentReadyText"
-                        labelName.dataset.el = comment.time
-                        labelName.textContent = comment.author
+                if (labelName) {
+                    labelName.classList.add("comment_ready_username")
+                    labelName.htmlFor = `commentReadyText_${comment.id}`
+                    labelName.dataset.el = comment.time
+                    labelName.textContent = comment.author
+                }
+                // // оформляем фото польз-ля
+                for (const account of accounts) {
+                    // console.log("зашли в цикл по массиву аккаунтов")
+                    if ((account.name === comment.author) && commentPhoto && commentPhotoMob) {
+                        // console.log("условие для присвоения ресурса с фото выполнено")
+                        commentPhoto.src = account.photo
+                        commentPhotoMob.src = account.photo
+                        break
                     }
-
-                    for (const account of accounts) {
-                        // console.log("зашли в цикл по массиву аккаунтов")
-                        if ((account.name === comment.author) && commentPhoto && commentPhotoMob) {
-                            // console.log("условие для присвоения ресурса с фото выполнено")
-                            commentPhoto.src = account.photo
-                            commentPhotoMob.src = account.photo
-                            break
-                        }
-                    }
+                }
             }
             // и добавляем получившийся итоговый блок в форму
             // form.appendChild(newReadyCommentBlock)
@@ -247,9 +226,9 @@ export default class MyComment {
         }
     }
 
-    public clear(comment:HTMLTextAreaElement | null):void {
-        if (comment) {
-            comment.value = "";
+    public clear(commentInputTextElem:HTMLTextAreaElement | null):void {
+        if (commentInputTextElem) {
+            commentInputTextElem.value = "";
         }
 
     }

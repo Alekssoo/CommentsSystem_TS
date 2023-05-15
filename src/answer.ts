@@ -34,7 +34,7 @@ export default class Answer extends MyComment {
 
    
 
-    public prepare(parentBlock:Element, inputBlockComment:Element | null) {
+    public prepareInputBlock(parentBlock:Element, inputBlockComment:Element | null) {
         if (!inputBlockComment) {return}
         // let parentComment = document.getElementById(idParent)
         let newAnswerInputBlock = document.createElement("div")
@@ -65,7 +65,13 @@ export default class Answer extends MyComment {
         
     }
 
-    public show(form: HTMLElement | null, readyComment: HTMLElement | null, accounts: any[]): void {
+    public show(form: HTMLElement | null, readyblockComment: HTMLElement | null, accounts: any[]): void {
+        let answerInputBlock:HTMLElement |null = document.querySelector(".answer_input_block")
+        super.show(form, answerInputBlock, accounts)
+        if (answerInputBlock) {answerInputBlock.remove()}
+        // let answerInputBlock = document.querySelector(".answer_input_block")
         
+        
+        // form?.querySelector()
     }
 }
