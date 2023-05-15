@@ -55,10 +55,16 @@ export default class Answer extends MyComment {
             answerTextElem.classList.add("answer_input")
         }
 
-        
+        let answersBlock = parentBlock.querySelector(".comment_answers")
 
-        if (parentBlock) {
-            parentBlock.insertAdjacentHTML('afterend', newAnswerInputBlock.outerHTML);
+        if (!answersBlock) {
+            let newAnswersBlock = document.createElement("div")
+            newAnswersBlock.classList.add("comment_answers")
+            let contentBlock = parentBlock.querySelector(".comment_content")
+            contentBlock?.appendChild(newAnswersBlock)
+            newAnswersBlock.insertAdjacentHTML('beforeend', newAnswerInputBlock.outerHTML);
+        } else {
+            answersBlock.insertAdjacentHTML('beforeend', newAnswerInputBlock.outerHTML);
         }
 
 

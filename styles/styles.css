@@ -365,6 +365,12 @@
     width: 90%;
 }
 
+
+.comment_bottom {
+    margin-bottom: 10px;
+}
+
+
 .comment_answer_button {
     /* text-decoration: none; */
     background-color: transparent;
@@ -388,8 +394,8 @@
 }
 
 .answer_input_block {
-    width:90%;
-    margin-left: 12%;
+    /* width:90%;
+    margin-left: 12%; */
 }  
 
 
