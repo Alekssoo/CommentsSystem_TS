@@ -323,15 +323,16 @@ export default class Main {
     private prepareComments(user:User, comment:MyComment, answer:Answer, formComment:HTMLElement | null, blockComment:HTMLElement | null, quantity:HTMLElement | null):void {
         //создаем и публикуем комментарии других пользователей
         // для примера ограничимся максимум 50-ю ком-ми
-        const commentAnswerButtons = document.querySelectorAll(".comment_answer_button")
+        // const commentAnswerButtons = document.querySelectorAll(".comment_answer_button")
         // const blockCommentAll = document.querySelectorAll(".comment_block")    
-        for (let account of user.accounts) {
-            if (comment.elements.length < 50) {
-                comment.create(comment.prepareText(), account.name)
-            } else {
-                break
-            }
-        }
+        // for (let account of user.accounts) {
+            // if (comment.elements.length < 50) {
+                let randInd:number = Math.floor(Math.random()*((user.accounts.length-1)+1))
+                comment.create(comment.prepareText(), user.accounts[randInd].name)
+            // } else {
+                // break
+            // }
+        // }
 
         comment.show(formComment, blockComment, user.accounts)
         

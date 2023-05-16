@@ -17,7 +17,7 @@ export default class Answer extends MyComment {
         this.text = text
         this.author = author
 
-        console.log("id для нового ответа равен = ", this.id)
+        // console.log("id для нового ответа равен = ", this.id)
         
         this.elements.push({
             id: this.id,
@@ -32,6 +32,15 @@ export default class Answer extends MyComment {
         console.log(`создали ответ с id = ${this.id}`)
     }
 
+    public load(): void {
+        if (localStorage.getItem("answers")) {
+            this.elements = JSON.parse(localStorage.getItem("answers") as string)
+        }
+    }
+
+    public save():void {
+        localStorage.setItem("answers", JSON.stringify(this.elements))
+    }
    
 
     public prepareInputBlock(parentBlock:Element, inputBlockComment:Element | null) {
@@ -41,9 +50,10 @@ export default class Answer extends MyComment {
         // newAnswerInputBlock.outerHTML = inputBlockComment.outerHTML
         
         
-        
+        //добавляем классы и содержимое созданному блоку
         newAnswerInputBlock.classList.add("comment_block", "answer_input_block")
         newAnswerInputBlock.innerHTML =  inputBlockComment.innerHTML;
+        newAnswerInputBlock.id = `${parentBlock.id}.${this.id}`
         // console.log(newAnswerInputBlock)
         let answerButton = newAnswerInputBlock.querySelector(".comment_submit_button")
         if (answerButton) {
@@ -55,6 +65,11 @@ export default class Answer extends MyComment {
             answerTextElem.classList.add("answer_input")
         }
 
+
+        //создаем блок ответов и добавляем в него ответ
+
+        // parentBlock.insertAdjacentHTML('afterend', newAnswerInputBlock.outerHTML);
+        console.log("id родит-го блока = ", parentBlock.id)
         let answersBlock = parentBlock.querySelector(".comment_answers")
 
         if (!answersBlock) {
@@ -67,14 +82,49 @@ export default class Answer extends MyComment {
             answersBlock.insertAdjacentHTML('beforeend', newAnswerInputBlock.outerHTML);
         }
 
-
+        //нужно взять айдишник родителя и присваивать блокам ответов с подпунктом номера ответа к комменту
         
     }
 
     public show(form: HTMLElement | null, readyblockComment: HTMLElement | null, accounts: any[]): void {
         let answerInputBlock:HTMLElement |null = document.querySelector(".answer_input_block")
+        
         super.show(form, answerInputBlock, accounts)
-        if (answerInputBlock) {answerInputBlock.remove()}
+        
+
+        if (answerInputBlock && answerInputBlock.parentElement && answerInputBlock.nextElementSibling) {
+            
+            let answerReadyBlock = answerInputBlock.nextElementSibling
+            answerReadyBlock.classList.add("answer_block")
+            answerReadyBlock.id = answerInputBlock.id
+            this.id = Number(answerInputBlock.id)
+            // this.save()
+
+            let answerBlocks = answerInputBlock.parentElement.querySelectorAll(".comment_block")
+            answerBlocks.forEach((answerBlock) => {
+                // if (!answerInputBlock) {return}
+                if (!answerBlock.classList.contains("answer_block")) {
+                    answerBlock.classList.add("answer_block")
+                }
+            }
+
+            )
+
+            
+            answerInputBlock.remove()
+            
+        }
+
+        
+
+        let answerReadyBlocks = document.querySelectorAll(".answer_block")
+        if (!answerReadyBlocks) {return}
+        answerReadyBlocks.forEach((answerReadyBlock) => {
+            let answerButton = answerReadyBlock.querySelector(".comment_answer_button")
+            if (answerButton) {answerButton.remove()}
+        })
+        
+
         // let answerInputBlock = document.querySelector(".answer_input_block")
         
         

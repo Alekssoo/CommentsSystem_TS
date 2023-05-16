@@ -47,7 +47,7 @@ export default class User {
             let users = data.results;
             users.forEach((user:any) => {
                 // искусственно ограничимся 49 пользователями
-                if ((that.accounts.length) <= 49) {
+                // if ((that.accounts.length) <= 49) {
                     that.addName(user.login.username);
                     that.addPhoto(user.picture.medium)
                 
@@ -57,10 +57,10 @@ export default class User {
                         name:that.name,
                         photo:that.photo})
                     console.log("создали нового пользователя")
-                } else {
-                    that.addName(that.accounts[that.accounts.length-1].name);
-                    that.addPhoto(that.accounts[that.accounts.length-1].photo)
-                }
+                // } else {
+                //     that.addName(that.accounts[that.accounts.length-1].name);
+                //     that.addPhoto(that.accounts[that.accounts.length-1].photo)
+                // }
                 
                 //сохраняем нового пользователя
                 localStorage.setItem("accounts", JSON.stringify(that.accounts))

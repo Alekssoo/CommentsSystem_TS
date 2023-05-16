@@ -393,10 +393,12 @@
     margin-bottom: 15px;
 }
 
-.answer_input_block {
-    /* width:90%;
-    margin-left: 12%; */
-}  
+/* .answer_input_block, .answer_block {
+    width:90%;
+    margin-left: 12%;
+}   */
+
+
 
 
 /*цвет активной кнопки  #ABD873 верный, неактивной - #A1A1A1 ?*/
