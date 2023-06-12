@@ -53,60 +53,69 @@ export default class MyComment {
         }
     }
 
-    public show(form:HTMLElement | null, inputBlockComment:HTMLElement | null, accounts:Array<any>) :void {
-        if (!form) { return }
-        if (!inputBlockComment) { return }
+    public prepareReadyBlockComment(comment:any, accounts:Array<any>): HTMLDivElement {
 
+        let readyBlockString = `
+                <div class="comment_photo">
+                    <img src="/sources/user.png" width="61" height="61" alt="user_photo" class="comment_photo_img">
+                </div>
+                <div class="comment_content">
+                    <div class="comment_main_ready">
+                        <div class="comment_main_head">
+                            <img src="/sources/user.png" width="50" height="50" alt="user_photo" class="comment_head_item comment_photo_mob">
+                            <label for="commentReadyText_${comment.id}" class="comment_head_item comment_username comment_ready_username" data-el=${comment.time}>${comment.author}</label>                 
+                        </div>
+                        <p class="comment_text" id="commentReadyText_${comment.id}">${comment.text}</p> <!-- блоку нужно присвоить id = commentReadyText_1 -->
+                    </div>
+                    <div class="comment_bottom">
+                        <button class="comment_answer_button opacity_text" type="button">
+                            <div style="display:flex; align-items:flex-end">
+                                <svg width="26" height="25" id="svg7384" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" style="margin-right:10px">
+                                    <g id="layer12" style="display:inline" transform="translate(-265.00039,-60.996639)">
+                                        <path d="m 272.0004,62.5 -6.46875,4.5 6.46875,4.5 0,-2.5 2,0 c 1.36491,0 2.5716,0.87335 2.9375,2 0.43763,1.34754 -1.4375,4 -1.4375,4 0,0 4,-1.5 4,-4.75 0,-3.12352 -2,-5.25 -5,-5.25 l -2.5,0 z" id="path4400-3" sodipodi:nodetypes="ccccsscsscc" style="color:#bebebe;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;opacity:0.5;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0;marker:none;enable-background:accumulate"></path>
+                                    </g>
+                                </svg>
+        
+                            Ответить</div>
+                        </button>
+                    </div>
+                    <div class="comment_answers">       
+                        
+                    </div>
+                </div>`
+
+            let readyBlock = document.createElement('div')
+            readyBlock.innerHTML = readyBlockString
+            readyBlock.classList.add("comment_block")
+            readyBlock.id = comment.id
+
+            // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
+            const labelElem:HTMLLabelElement | null = readyBlock.querySelector(".comment_username");
+            this.prepareLabelPart(labelElem, readyBlock, comment, accounts)
+
+            return readyBlock
+
+    }
+
+    public showAll(inputBlockComment:HTMLElement | null, accounts:Array<any>) :void {
         this.load()
         
-        
         for (const comment of this.elements) {
-            //чтобы не дублировались опубликованные комменты:
             if (document.getElementById(`${comment.id}`)) {
+                console.log('уже есть элемент с таким id = ', comment.id)
                 continue
             }
+            this.show(inputBlockComment, accounts, comment)
 
-            // создаем новый абзац из отправленного комментария
-            let newText = document.createElement("p");
-            newText.textContent = comment.text
-            newText.classList.add("comment_text")
-            newText.id = `commentReadyText_${comment.id}`
+        }
 
-            // и добавляем подвал для готового коммента
-            let bottomComment = document.createElement("div");
-            let ansButton:HTMLButtonElement = document.createElement("button");
-            this.prepareBottomPart(bottomComment, ansButton)
-            
-            
-            //клонируем и переделываем контэйнер с комментарием для показа
-            let newReadyCommentBlock = document.createElement("div")
-            newReadyCommentBlock.classList.add("comment_block")
-            newReadyCommentBlock.insertAdjacentHTML('afterbegin', inputBlockComment.innerHTML);
-            
-            //удаляем: блок для ввода,отправки из введ-го коммента 
-            // и уведомление о длине, заменяем на наполнение готового комментария
+    }
 
-            newReadyCommentBlock.id = `${comment.id}`
-            
-            
-            
-            newReadyCommentBlock.querySelector(".comment")?.remove()
-            newReadyCommentBlock.querySelector(".comment_length")?.remove()
-            newReadyCommentBlock.querySelector(".comment_submit")?.remove()
+    public show(inputBlockComment:HTMLElement | null, accounts:Array<any>, comment:any) :void {
+        let readyBlockComment = this.prepareReadyBlockComment(comment, accounts)
 
-            let contentElem:Element | null = newReadyCommentBlock.querySelector(".comment_content")
-            if (contentElem) {  
-                contentElem.appendChild(newText)
-                bottomComment.appendChild(ansButton)
-                contentElem.appendChild(bottomComment)
-
-                // оформляем имя польз-ля(label) с датой (псевдоэлемент dataset.el)
-                const labelElem:HTMLLabelElement | null = contentElem.querySelector(".comment_username");
-                this.prepareLabelPart(labelElem, newReadyCommentBlock, comment, accounts)
-            }
-            // и добавляем получившийся итоговый блок в форму
-            // form.appendChild(newReadyCommentBlock)
-            inputBlockComment.insertAdjacentHTML('afterend', newReadyCommentBlock.outerHTML);
+        if (inputBlockComment && readyBlockComment){
+            inputBlockComment.insertAdjacentHTML('afterend', readyBlockComment.outerHTML);
         }
     }
 
@@ -144,6 +153,7 @@ export default class MyComment {
                 lengthCommentElem.textContent = `${lenComment}/${this.maxlength}`
                 button.dataset.el = ""
                 lengthCommentElem.classList.remove("alarm_text")
+                // console.log(`введенный текст = (${commentTextElem?.value})`)
             }
         }
     }

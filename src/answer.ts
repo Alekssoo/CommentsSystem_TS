@@ -10,26 +10,30 @@ export default class Answer extends MyComment {
 
 
     public create(text: string, author: string):void {
+        // console.log("зашли в создание ответа")
         this.load()
-        
-        this.id = this.elements.length
+ 
         this.setTime(Math.floor(Date.now()/1000))
         this.text = text
         this.author = author
+        let parentBlock = document.querySelector(".answer_input_block")?.parentElement?.parentElement?.parentElement
 
-        // console.log("id для нового ответа равен = ", this.id)
+        if (parentBlock) {
+            console.log("id родит.блока равен = ", parentBlock.id)
+            let lenAnswers = parentBlock.querySelectorAll(".answer_block").length + 1
+            this.id = Number(`${parentBlock.id}.${lenAnswers}`)
+            console.log(this.id)
+            this.elements.push({
+                id: this.id,
+                author: this.author,
+                text: this.text,
+                rating: this.rating,
+                time: this.time,
+            })
+        }
         
-        this.elements.push({
-            id: this.id,
-            author: this.author,
-            text: this.text,
-            rating: this.rating,
-            time: this.time,
-        })
-
         this.save()
-
-        console.log(`создали ответ с id = ${this.id}`)
+        // console.log("id для нового ответа равен = ", this.id)
     }
 
     public load(): void {
@@ -41,93 +45,92 @@ export default class Answer extends MyComment {
     public save():void {
         localStorage.setItem("answers", JSON.stringify(this.elements))
     }
-   
 
-    public prepareInputBlock(parentBlock:Element, inputBlockComment:Element | null) {
-        if (!inputBlockComment) {return}
-        // let parentComment = document.getElementById(idParent)
+    public prepareInputBlock(inputBlock: HTMLElement | null, parentBlock:Element) {
+        console.log("зашли в метод подготовки инпута ответа")
+        if (document.querySelector(".answer_input_block")) {return}
+
         let newAnswerInputBlock = document.createElement("div")
-        // newAnswerInputBlock.outerHTML = inputBlockComment.outerHTML
+
+        if (!inputBlock) {return}
+        let photoInput:HTMLImageElement | null = inputBlock.querySelector(".comment_photo_img")
+        let nameInput:HTMLElement | null = inputBlock.querySelector(".comment_username")
+        if (!photoInput) {return}
+        newAnswerInputBlock.innerHTML = `
+                <div class="comment_photo">
+                    <img src="${photoInput.src}" width="61" height="61" alt="user_photo" class="comment_photo_img">
+                </div>
+                <div class="comment_content">       
+                    <div class="comment_main">
+                        <div class="comment_main_head">
+                            <img src="${photoInput.src}" width="50" height="50" alt="user_photo" class="comment_head_item comment_photo_mob">
+                            <label for="comment" class="comment_head_item comment_username">${nameInput?.textContent}</label>
+                            <span class="comment_length opacity_text small_text"><em>Макс. 1000 символов</em></span>
+                        </div>
+                        <textarea placeholder="Введите текст сообщения..." name="comment" class="comment answer_input" style="height:61px;"></textarea>
+                    </div>
+                                    
+                    <div class="comment_submit">       
+                        <button type="submit" class="comment_submit_button answer_submit_button" data-el="" disabled>Отправить</button>
+                    </div>
+
+                </div>
+            `
         
-        
-        //добавляем классы и содержимое созданному блоку
+        //добавляем классы созданному блоку
         newAnswerInputBlock.classList.add("comment_block", "answer_input_block")
-        newAnswerInputBlock.innerHTML =  inputBlockComment.innerHTML;
-        newAnswerInputBlock.id = `${parentBlock.id}.${this.id}`
-        // console.log(newAnswerInputBlock)
-        let answerButton = newAnswerInputBlock.querySelector(".comment_submit_button")
-        if (answerButton) {
-            answerButton.classList.add("answer_submit_button")
-        }
 
-        let answerTextElem = newAnswerInputBlock.querySelector(".comment")
-        if (answerTextElem) {
-            answerTextElem.classList.add("answer_input")
-        }
-
-
-        //создаем блок ответов и добавляем в него ответ
-
-        // parentBlock.insertAdjacentHTML('afterend', newAnswerInputBlock.outerHTML);
-        console.log("id родит-го блока = ", parentBlock.id)
+        // console.log("id родит-го блока = ", parentBlock.id)
         let answersBlock = parentBlock.querySelector(".comment_answers")
 
-        if (!answersBlock) {
-            let newAnswersBlock = document.createElement("div")
-            newAnswersBlock.classList.add("comment_answers")
-            let contentBlock = parentBlock.querySelector(".comment_content")
-            contentBlock?.appendChild(newAnswersBlock)
-            newAnswersBlock.insertAdjacentHTML('beforeend', newAnswerInputBlock.outerHTML);
-        } else {
-            answersBlock.insertAdjacentHTML('beforeend', newAnswerInputBlock.outerHTML);
+        if (answersBlock) {
+            answersBlock.insertAdjacentHTML('afterbegin', newAnswerInputBlock.outerHTML);
         }
-
-        //нужно взять айдишник родителя и присваивать блокам ответов с подпунктом номера ответа к комменту
         
     }
 
-    public show(form: HTMLElement | null, readyblockComment: HTMLElement | null, accounts: any[]): void {
-        let answerInputBlock:HTMLElement |null = document.querySelector(".answer_input_block")
-        
-        super.show(form, answerInputBlock, accounts)
-        
+    public prepareReadyBlockComment(answer:any, accounts:Array<any>): HTMLDivElement {
+        let readyAnswerBlock = super.prepareReadyBlockComment(answer, accounts)
+        readyAnswerBlock.classList.add("answer_block")
+        // удаляем кнопку ответа для блока ответа
+        let answerButton = readyAnswerBlock.querySelector(".comment_answer_button")
+        if (answerButton) {answerButton.remove()}
 
-        if (answerInputBlock && answerInputBlock.parentElement && answerInputBlock.nextElementSibling) {
-            
-            let answerReadyBlock = answerInputBlock.nextElementSibling
-            answerReadyBlock.classList.add("answer_block")
-            answerReadyBlock.id = answerInputBlock.id
-            this.id = Number(answerInputBlock.id)
-            // this.save()
+        return readyAnswerBlock
+    }
 
-            let answerBlocks = answerInputBlock.parentElement.querySelectorAll(".comment_block")
-            answerBlocks.forEach((answerBlock) => {
-                // if (!answerInputBlock) {return}
-                if (!answerBlock.classList.contains("answer_block")) {
-                    answerBlock.classList.add("answer_block")
+    public show(parentBlock: Element | null, accounts: any[], answer:any): void {
+        // console.log("зашли в метод show для answer")
+        if (!parentBlock) {return}
+
+        const answerInputBlock:HTMLElement |null = parentBlock.querySelector(".answer_input_block")
+        if (answerInputBlock) {answerInputBlock.remove() } 
+        
+        let readyBlockComment = this.prepareReadyBlockComment(answer, accounts)
+        readyBlockComment.id = answer.id
+
+        const answersBlock:HTMLElement |null = parentBlock.querySelector(".comment_answers")
+        if (answersBlock) {
+            answersBlock.insertAdjacentHTML('afterbegin', readyBlockComment.outerHTML);
+        }
+        
+    }
+
+    public showAll(readyBlockComment:Element | null, accounts:Array<any>): void {
+        this.load()
+        for (let answer of this.elements) {
+            if (document.getElementById(`${answer.id}`)) {
+                console.log('уже есть элемент с таким id = ', answer.id)
+                continue
+            }
+
+            let blocks = document.querySelectorAll(".comment_block")
+            for (let parentBlock of blocks){
+                if (parentBlock && (String(answer.id).split(".")[0] == parentBlock.id)) {
+                    this.show(parentBlock, accounts, answer)
                 }
             }
 
-            )
-
-            
-            answerInputBlock.remove()
-            
         }
-
-        
-
-        let answerReadyBlocks = document.querySelectorAll(".answer_block")
-        if (!answerReadyBlocks) {return}
-        answerReadyBlocks.forEach((answerReadyBlock) => {
-            let answerButton = answerReadyBlock.querySelector(".comment_answer_button")
-            if (answerButton) {answerButton.remove()}
-        })
-        
-
-        // let answerInputBlock = document.querySelector(".answer_input_block")
-        
-        
-        // form?.querySelector()
     }
 }

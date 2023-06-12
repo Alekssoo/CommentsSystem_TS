@@ -11,10 +11,10 @@ export default class Main {
         this.prepareForm(section)
         document.body.appendChild(section)
 
-        const formComment:HTMLElement | null = document.querySelector(".comment_form")
+        // const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const blockComment:HTMLElement | null = document.querySelector(".comment_block")
-        // const blockCommentAll = document.querySelectorAll(".comment_block")
-        const lenAllComments:HTMLElement | null = document.querySelector(".comments_params_quantity")
+        let blockCommentAll = document.querySelectorAll(".comment_block")
+        const lenAllCommentsElem:HTMLElement | null = document.querySelector(".comments_params_quantity")
         const sortComment:HTMLSelectElement | null = document.querySelector(".comments_params_sort")
         // const sortCommentList:NodeListOf<Element> = document.querySelectorAll(".comments_sort_item")
         // const container = document.querySelector(".comment_container")
@@ -24,67 +24,26 @@ export default class Main {
         const lengthComment:HTMLElement | null = document.querySelector(".comment_length")
         // const commentAnswerButton:HTMLElement | null = document.querySelector(".comment_answer_button")
         
-
-
         const user = new User();
         const comment = new MyComment();
         const answer = new Answer();
 
-        this.prepareUsers(user, comment, answer, formComment, blockComment, lenAllComments)
-
-        // commentTextElem?.addEventListener("input", () =>
-        //     // this.setButton(commentTextElem, button))
-        //     comment.checkLength(commentTextElem, button, lengthComment))
-        
-        // commentTextElem?.addEventListener('keyup', function() {
-        //     if (this.scrollTop > 0){
-        //         this.style.height = `${this.scrollHeight}px`;
-        //     }
-        // });
-        this.prepareInputElem(comment, commentTextElem, blockComment, button, lengthComment)
-        
+        this.prepareUsers(user, comment, answer, blockComment, lenAllCommentsElem)
+        this.prepareInputElem(comment, commentTextElem, button, lengthComment)
         this.prepareSelectSort(sortComment)
-        this.prepareButton(formComment, blockComment, comment, user, answer, commentTextElem, lengthComment, lenAllComments, button)
-        
-        // if (commentAnswerButton && blockComment) {
-        //     commentAnswerButton.addEventListener("click", (event) => {
-        //         console.log("зашли в реакцию на клик кнопки ответа")
-        //         event.preventDefault()
-        //         answer.prepare(blockComment.id, blockComment)
-                
-        //     })
-        // }  
+        this.prepareButton(blockComment, comment, user, answer, commentTextElem, lengthComment, lenAllCommentsElem, button) 
         
         document.addEventListener("DOMContentLoaded", () => {
             if (blockComment) {
-
-                // if (commentAnswerButton && blockComment) {
-                //     commentAnswerButton.addEventListener("click", (event) => {
-                //         event.preventDefault()
-                //         answer.prepare(blockComment.id, blockComment)
-                        
-                //     })
-                // }   
                 // Подгружаем все комменты после загрузки пользователей
-                comment.show(formComment, blockComment, user.accounts)
+                comment.showAll(blockComment, user.accounts)
+                answer.showAll(blockCommentAll[1], user.accounts)
                 // указываем общее количество комментариев на странице
-                this.prepareQuantity(lenAllComments, comment.elements)
-
-                // answer.prepare(blockComment)
+                this.prepareQuantity(lenAllCommentsElem, comment.elements)
             }
             
 
         });    
-
-
-        // document.addEventListener("load", () => {
-        //     if (blockComment) {
-        //         // Подгружаем все комменты после загрузки пользователей
-        //         comment.show(formComment, blockComment, user.accounts)
-        //         // указываем общее количество комментариев на странице
-        //         this.prepareQuantity(lenAllComments, comment.elements)
-        //     }
-        // });
     }
 
     prepareForm(container:HTMLElement):void {
@@ -137,12 +96,9 @@ export default class Main {
                         <img src="/sources/user.png" width="61" height="61" alt="user_photo" class="comment_photo_img">
                     </div>
                     <div class="comment_content">
-                        <div class="comment_container">
                             ${commentMain}
                             ${commentSubmit}
-                        </div>
                     </div>
-                    
                 </div>
             </form>`
     }
@@ -155,43 +111,7 @@ export default class Main {
     }
 
 
-    private prepareButton(formComment:HTMLElement | null , blockComment:HTMLElement | null, comment: MyComment, user: User, answer:Answer, textArea:HTMLTextAreaElement | null, lengthTextElem:HTMLElement | null, lenAllComments:HTMLElement | null, button:HTMLButtonElement | null): void {
-        //добавляем создание коммента с условиями по нажатию кнопки
-        // const buttonsSubmit = document.querySelectorAll(".comment_submit_button")
-
-        // for(let buttonSubmit of buttonsSubmit) {
-        //     buttonSubmit?.addEventListener ("click", (event) => {
-        //         event?.preventDefault();
-                
-        //         let textComment  = textArea?.value
-
-        //         if (blockComment && textComment && textArea) {
-        //             if (buttonSubmit.classList.contains("answer_submit_button")) {
-        //                 answer.create(textComment, user.name)
-        //             } else {
-        //                 comment.create(textComment, user.name)
-        //                 comment.show(formComment, blockComment, user.accounts)
-        //                 comment.clear(textArea)
-        //                 comment.checkLength(textArea, button, lengthComment)
-        //                 textArea.style.height = "61px" 
-        //             }
-        //         }
-    
-        //         //меняем состояние кнопки в зависимости от длины введенного текста польз-м
-        //         let lenComment = textArea?.value?.length
-                    
-        //         if (buttonSubmit) {
-        //             if (!lenComment || lenComment && lenComment > comment.maxlength) {
-        //                 buttonSubmit.setAttribute('disabled', '');
-        //             } else { 
-        //                 buttonSubmit.removeAttribute("disabled")
-        //             }
-        //         }
-        //         this.prepareQuantity(lenAllComments, comment.elements)
-    
-        //         this.prepareAnswers(answer, user, comment, blockComment, lenAllComments)
-        //     })
-        // }
+    private prepareButton(blockComment:HTMLElement | null, comment: MyComment | Answer, user: User, answer:Answer, textArea:HTMLTextAreaElement | null, lengthTextElem:HTMLElement | null, lenAllComments:HTMLElement | null, button:HTMLButtonElement | null): void {
         
         button?.addEventListener ("click", (event) => {
             event?.preventDefault();
@@ -199,19 +119,17 @@ export default class Main {
             let textComment  = textArea?.value
             
             if (blockComment && textComment && textArea) {
-                
-
-                if (button.classList.contains("answer_submit_button")) {
-                    answer.create(textComment, user.name)
-                    answer.show(formComment, blockComment, user.accounts)
-                    // blockComment.remove()
-                } else {
+                // if (button.classList.contains("answer_submit_button")) {
+                //     answer.create(textComment, user.name)
+                //     answer.showAll(blockComment, user.accounts)
+                //     // blockComment.remove()
+                // } else {
                     comment.create(textComment, user.name)
-                    comment.show(formComment, blockComment, user.accounts)
+                    comment.showAll(blockComment, user.accounts)
                     comment.clear(textArea)
                     comment.checkLength(textArea, button, lengthTextElem)
                     textArea.style.height = "61px" 
-                }
+                // }
             }
 
             //меняем состояние кнопки в зависимости от длины введенного текста польз-м
@@ -291,7 +209,7 @@ export default class Main {
         
     }
 
-    private prepareUsers(user:User, comment:MyComment, answer:Answer, formComment:HTMLElement | null, blockComment:HTMLElement | null, lenAllComments:HTMLElement | null):void {
+    private prepareUsers(user:User, comment:MyComment, answer:Answer, blockComment:HTMLElement | null, lenAllComments:HTMLElement | null):void {
         const userName:HTMLElement | null = document.querySelector(".comment_username")
         const commentPhoto:HTMLImageElement | null = document.querySelector(".comment_photo_img")
         const commentPhotoMob:HTMLImageElement | null = document.querySelector(".comment_photo_mob")
@@ -309,7 +227,7 @@ export default class Main {
                     // console.log("user.photo = ", user.photo)
             }
             
-            this.prepareComments(user, comment, answer, formComment, blockComment, lenAllComments)
+            this.prepareComments(user, comment, answer, blockComment, lenAllComments)
             this.prepareAnswers(answer, user, comment, blockComment, lenAllComments)
         }) .catch(() => {
             if (commentPhoto && commentPhotoMob) {
@@ -320,7 +238,7 @@ export default class Main {
 
     } 
 
-    private prepareComments(user:User, comment:MyComment, answer:Answer, formComment:HTMLElement | null, blockComment:HTMLElement | null, quantity:HTMLElement | null):void {
+    private prepareComments(user:User, comment:MyComment, answer:Answer, blockComment:HTMLElement | null, quantity:HTMLElement | null):void {
         //создаем и публикуем комментарии других пользователей
         // для примера ограничимся максимум 50-ю ком-ми
         // const commentAnswerButtons = document.querySelectorAll(".comment_answer_button")
@@ -334,83 +252,54 @@ export default class Main {
             // }
         // }
 
-        comment.show(formComment, blockComment, user.accounts)
-        
-
-
-        // if (commentAnswerButtons && blockComment) {
-        //     commentAnswerButtons.forEach((button)=>{
-        //         // console.log("кнопка ответа = ", button)
-        //         button.addEventListener("click", (event) => {
-        //             console.log("зашли в реакцию на клик кнопки ответа")
-        //             event.preventDefault()
-        //             answer.prepare(blockComment.id, blockComment)                   
-        //         })
-        //     })  
-        // }
+        comment.showAll(blockComment, user.accounts)
         this.prepareQuantity(quantity, comment.elements)
     }
 
     private prepareAnswers(answer:Answer, user: User, comment:MyComment, blockComment:HTMLElement | null, lenAllComments: HTMLElement | null) {
-        const formComment:HTMLElement | null = document.querySelector(".comment_form")
         const blockCommentAll = document.querySelectorAll(".comment_block") 
+        const inputBlock:HTMLElement | null = document.getElementById("input_block")
         // добавляем отображение формы ответа по кнопке в комментах
         if (blockCommentAll) {
             for (let block of blockCommentAll) {
-                if (block.id == "input_block") {continue}
+                //пропускаем основной блок ввода
+                if (block.id == "input_block") { continue }
 
                 const commentAnswerButton:HTMLButtonElement | null = block.querySelector(".comment_answer_button")
                 
-                if (!commentAnswerButton) return;
+                if (!commentAnswerButton) { continue }
                 let prepareAnswerInputForm = () => {
                     // если блок ввода ответа на коммента уже существует, завершаем, не создавая новый
-                    if (document.querySelector(".answer_input_block")) {return}
-
-                    answer.prepareInputBlock(block, blockComment)
+                    console.log("зашли в подготовку инпута ответа")
+                    answer.prepareInputBlock(inputBlock, block)
+                    
                     
                     const answerInputBlock = document.querySelector(".answer_input_block")
-                    if (!answerInputBlock) {
-                        // console.log("Нет блока ввода коммента в искомом блоке")
-                        return;
-                    }
+                    if (!answerInputBlock) { return }
 
                     // console.log("Нашли блок ввода коммента в искомом блоке: ", answerInputBlock)
 
                     const textArea:HTMLTextAreaElement | null  = answerInputBlock.querySelector(".answer_input")
                     const answerSubmitButton:HTMLButtonElement | null = answerInputBlock.querySelector(".answer_submit_button")
+
                     if (!answerSubmitButton) {
                         // console.log("Нет кнопки, не заходим в обработку клика")
                         return;
                     }
 
                     const lengthAnswerElem:HTMLElement | null = answerInputBlock.querySelector(".comment_length")
-                    // if (!lengthAnswerElem) {
-                    //     console.log("Нет элемента с длиной ответа")
-         
-                    // }
 
-                    // console.log("Нашли кнопку в блоке ответа: ", answerSubmitButton)
-                    // console.log("Нашли textArea в форме ответа: ", textArea)
+                    this.prepareButton(blockComment, answer, user, answer, textArea, lengthAnswerElem, lenAllComments, answerSubmitButton)
+                    this.prepareInputElem(answer, textArea, answerSubmitButton, lengthAnswerElem)
+                } 
 
-                    // let textComment  = textArea?.value
-
-                    this.prepareButton(formComment, blockComment, comment, user, answer, textArea, lengthAnswerElem, lenAllComments, answerSubmitButton)
-
-                    
-
-                    this.prepareInputElem(answer, textArea, blockComment, answerSubmitButton, lengthAnswerElem)
-                }
                 commentAnswerButton.addEventListener("click", prepareAnswerInputForm)
-                commentAnswerButton.addEventListener("click", () => {
-                    commentAnswerButton.removeEventListener("click", prepareAnswerInputForm)
-                })
-
-            }
+            } 
 
         }
     }
 
-    private prepareInputElem(comment:MyComment | Answer, commentTextElem:HTMLTextAreaElement | null, blockComment:HTMLElement | null, button:HTMLButtonElement | null, lengthCommentElem:HTMLElement | null):void {
+    private prepareInputElem(comment:MyComment | Answer, commentTextElem:HTMLTextAreaElement | null, button:HTMLButtonElement | null, lengthCommentElem:HTMLElement | null):void {
         commentTextElem?.addEventListener("input", () =>
         // this.setButton(commentTextElem, button))
         comment.checkLength(commentTextElem, button, lengthCommentElem))
