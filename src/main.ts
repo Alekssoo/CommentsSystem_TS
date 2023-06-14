@@ -3,7 +3,10 @@ import Answer from "./answer.js";
 import User from "./user.js";
 
 export default class Main {
-    constructor() { 
+    public quantity:Number;
+
+    constructor() {
+        this.quantity = 0
     }
 
     public prepare():void {
@@ -31,7 +34,7 @@ export default class Main {
         this.prepareUsers(user, comment, answer, blockComment, lenAllCommentsElem)
         this.prepareInputElem(comment, commentTextElem, button, lengthComment)
         this.prepareSelectSort(sortComment)
-        this.prepareButton(blockComment, comment, user, answer, commentTextElem, lengthComment, lenAllCommentsElem, button) 
+        this.prepareButtons(blockComment, comment, user, answer, commentTextElem, lengthComment, lenAllCommentsElem, button) 
         
         document.addEventListener("DOMContentLoaded", () => {
             if (blockComment) {
@@ -39,7 +42,7 @@ export default class Main {
                 comment.showAll(blockComment, user.accounts)
                 answer.showAll(blockCommentAll[1], user.accounts)
                 // указываем общее количество комментариев на странице
-                this.prepareQuantity(lenAllCommentsElem, comment.elements)
+                this.prepareQuantity(lenAllCommentsElem, comment.elements, answer.elements)
             }
             
 
@@ -104,14 +107,17 @@ export default class Main {
     }
 
 
-    private prepareQuantity(quantity:HTMLElement | null, elements:Array<any>): void {
+    private prepareQuantity(quantity:HTMLElement | null, commentElements:Array<any>, answerElements:Array<any>): void {
+        this.quantity = commentElements.length + answerElements.length
+        console.log("количество коментов", commentElements.length)
+        console.log("количество ответов", answerElements.length)
         if (quantity) {
-            quantity.textContent = `(${elements.length})`
+            quantity.textContent = `(${this.quantity})`
         }       
     }
 
 
-    private prepareButton(blockComment:HTMLElement | null, comment: MyComment | Answer, user: User, answer:Answer, textArea:HTMLTextAreaElement | null, lengthTextElem:HTMLElement | null, lenAllComments:HTMLElement | null, button:HTMLButtonElement | null): void {
+    private prepareButtons(blockComment:HTMLElement | null, comment: MyComment, user: User, answer:Answer, textArea:HTMLTextAreaElement | null, lengthTextElem:HTMLElement | null, lenAllComments:HTMLElement | null, button:HTMLButtonElement | null): void {
         
         button?.addEventListener ("click", (event) => {
             event?.preventDefault();
@@ -119,17 +125,17 @@ export default class Main {
             let textComment  = textArea?.value
             
             if (blockComment && textComment && textArea) {
-                // if (button.classList.contains("answer_submit_button")) {
-                //     answer.create(textComment, user.name)
-                //     answer.showAll(blockComment, user.accounts)
-                //     // blockComment.remove()
-                // } else {
+                if (button.classList.contains("answer_submit_button")) {
+                    answer.create(textComment, user.name)
+                    answer.showAll(blockComment, user.accounts)
+                
+                } else {
                     comment.create(textComment, user.name)
                     comment.showAll(blockComment, user.accounts)
                     comment.clear(textArea)
                     comment.checkLength(textArea, button, lengthTextElem)
                     textArea.style.height = "61px" 
-                // }
+                }
             }
 
             //меняем состояние кнопки в зависимости от длины введенного текста польз-м
@@ -142,7 +148,7 @@ export default class Main {
                     button.removeAttribute("disabled")
                 }
             }
-            this.prepareQuantity(lenAllComments, comment.elements)
+            this.prepareQuantity(lenAllComments, comment.elements, answer.elements)
 
             this.prepareAnswers(answer, user, comment, blockComment, lenAllComments)
         })
@@ -253,7 +259,7 @@ export default class Main {
         // }
 
         comment.showAll(blockComment, user.accounts)
-        this.prepareQuantity(quantity, comment.elements)
+        this.prepareQuantity(quantity, comment.elements, answer.elements)
     }
 
     private prepareAnswers(answer:Answer, user: User, comment:MyComment, blockComment:HTMLElement | null, lenAllComments: HTMLElement | null) {
@@ -270,11 +276,12 @@ export default class Main {
                 if (!commentAnswerButton) { continue }
                 let prepareAnswerInputForm = () => {
                     // если блок ввода ответа на коммента уже существует, завершаем, не создавая новый
-                    console.log("зашли в подготовку инпута ответа")
+                    // console.log("зашли в подготовку инпута ответа")
+                    // if(document.querySelector(".answer_input_block")) {document.querySelector(".answer_input_block")?.remove()}
                     answer.prepareInputBlock(inputBlock, block)
                     
                     
-                    const answerInputBlock = document.querySelector(".answer_input_block")
+                    const answerInputBlock = block.querySelector(".answer_input_block")
                     if (!answerInputBlock) { return }
 
                     // console.log("Нашли блок ввода коммента в искомом блоке: ", answerInputBlock)
@@ -289,7 +296,7 @@ export default class Main {
 
                     const lengthAnswerElem:HTMLElement | null = answerInputBlock.querySelector(".comment_length")
 
-                    this.prepareButton(blockComment, answer, user, answer, textArea, lengthAnswerElem, lenAllComments, answerSubmitButton)
+                    this.prepareButtons(blockComment, comment, user, answer, textArea, lengthAnswerElem, lenAllComments, answerSubmitButton)
                     this.prepareInputElem(answer, textArea, answerSubmitButton, lengthAnswerElem)
                 } 
 

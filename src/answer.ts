@@ -47,8 +47,8 @@ export default class Answer extends MyComment {
     }
 
     public prepareInputBlock(inputBlock: HTMLElement | null, parentBlock:Element) {
-        console.log("зашли в метод подготовки инпута ответа")
-        if (document.querySelector(".answer_input_block")) {return}
+        // console.log("зашли в метод подготовки инпута ответа")
+        if (document.querySelector(".answer_input_block")) {document.querySelector(".answer_input_block")?.remove()}
 
         let newAnswerInputBlock = document.createElement("div")
 
@@ -89,9 +89,11 @@ export default class Answer extends MyComment {
         
     }
 
-    public prepareReadyBlockComment(answer:any, accounts:Array<any>): HTMLDivElement {
-        let readyAnswerBlock = super.prepareReadyBlockComment(answer, accounts)
+    public prepareReadyBlockComment(parentBlock:Element | null, answer:any, accounts:Array<any>): HTMLDivElement {
+        let readyAnswerBlock = super.prepareReadyBlockComment(parentBlock, answer, accounts)
         readyAnswerBlock.classList.add("answer_block")
+
+        
         // удаляем кнопку ответа для блока ответа
         let answerButton = readyAnswerBlock.querySelector(".comment_answer_button")
         if (answerButton) {answerButton.remove()}
@@ -106,7 +108,7 @@ export default class Answer extends MyComment {
         const answerInputBlock:HTMLElement |null = parentBlock.querySelector(".answer_input_block")
         if (answerInputBlock) {answerInputBlock.remove() } 
         
-        let readyBlockComment = this.prepareReadyBlockComment(answer, accounts)
+        let readyBlockComment = this.prepareReadyBlockComment(parentBlock, answer, accounts)
         readyBlockComment.id = answer.id
 
         const answersBlock:HTMLElement |null = parentBlock.querySelector(".comment_answers")
@@ -116,11 +118,38 @@ export default class Answer extends MyComment {
         
     }
 
+    protected prepareLabelPart(parentBlock: Element | null, labelElem:HTMLLabelElement | null, newReadyCommentBlock:HTMLElement, comment:any, accounts:any) {
+        super.prepareLabelPart(parentBlock, labelElem, newReadyCommentBlock, comment, accounts)
+        if (labelElem && labelElem.dataset.el) {
+            labelElem.dataset.el = ""
+        console.log("родит. блок ответа: ", parentBlock)
+        if (!parentBlock) {return}
+        let authorParent = parentBlock.querySelector(".comment_username")?.textContent
+        console.log("автор родит. блока ответа: ", authorParent)
+        // let authorParentElem = document.createElement("span")
+        labelElem.innerHTML = `
+            <span class="comment_label_content">${labelElem.textContent} <span class="comment_datetime_mobile opacity_text small_text">${comment.time}</span>
+                <span class ="comment_labelIcon opacity_text">    
+                    <svg width='21' height='20' id='svg7384' xmlns:osb='http://www.openswatchbook.org/uri/2009/osb' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns='http://www.w3.org/2000/svg' viewBox="0 0 14 14" style="margin-right:10px">
+                        <g id='layer12' style='display:inline' transform='translate(-265.00039,-60.996639)'>
+                            <path d='m 272.0004,62.5 -6.46875,4.5 6.46875,4.5 0,-2.5 2,0 c 1.36491,0 2.5716,0.87335 2.9375,2 0.43763,1.34754 -1.4375,4 -1.4375,4 0,0 4,-1.5 4,-4.75 0,-3.12352 -2,-5.25 -5,-5.25 l -2.5,0 z' id='path4400-3' sodipodi:nodetypes='ccccsscsscc' style='color:#bebebe;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;opacity:0.5;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0;marker:none;enable-background:accumulate'/>
+                        </g>
+                    </svg>
+                    ${authorParent}
+                    <span class="comment_datetime small_text">${comment.time}</span>
+                </span>
+            </span>`
+        // authorParentElem.classList.add("comment_labelIcon", "opacity_text")
+        // labelElem.innerHTML += authorParentElem.innerHTML
+        // labelElem?.insertAdjacentElement("afterend", authorParentElem)
+        }
+    }
+
     public showAll(readyBlockComment:Element | null, accounts:Array<any>): void {
         this.load()
         for (let answer of this.elements) {
             if (document.getElementById(`${answer.id}`)) {
-                console.log('уже есть элемент с таким id = ', answer.id)
+                // console.log('уже есть элемент с таким id = ', answer.id)
                 continue
             }
 
