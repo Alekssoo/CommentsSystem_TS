@@ -122,10 +122,10 @@ export default class Answer extends MyComment {
         super.prepareLabelPart(parentBlock, labelElem, newReadyCommentBlock, comment, accounts)
         if (labelElem && labelElem.dataset.el) {
             labelElem.dataset.el = ""
-        console.log("родит. блок ответа: ", parentBlock)
+        // console.log("родит. блок ответа: ", parentBlock)
         if (!parentBlock) {return}
         let authorParent = parentBlock.querySelector(".comment_username")?.textContent
-        console.log("автор родит. блока ответа: ", authorParent)
+        // console.log("автор родит. блока ответа: ", authorParent)
         // let authorParentElem = document.createElement("span")
         labelElem.innerHTML = `
             <span class="comment_label_content">${labelElem.textContent} <span class="comment_datetime_mobile opacity_text small_text">${comment.time}</span>

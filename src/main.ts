@@ -36,6 +36,8 @@ export default class Main {
         this.prepareSelectSort(sortComment)
         this.prepareButtons(blockComment, comment, user, answer, commentTextElem, lengthComment, lenAllCommentsElem, button) 
         
+
+
         document.addEventListener("DOMContentLoaded", () => {
             if (blockComment) {
                 // Подгружаем все комменты после загрузки пользователей
@@ -43,6 +45,7 @@ export default class Main {
                 answer.showAll(blockCommentAll[1], user.accounts)
                 // указываем общее количество комментариев на странице
                 this.prepareQuantity(lenAllCommentsElem, comment.elements, answer.elements)
+                // this.prepareButtons(blockComment, comment, user, answer, commentTextElem, lengthComment, lenAllCommentsElem, button) 
             }
             
 
@@ -118,9 +121,24 @@ export default class Main {
 
 
     private prepareButtons(blockComment:HTMLElement | null, comment: MyComment, user: User, answer:Answer, textArea:HTMLTextAreaElement | null, lengthTextElem:HTMLElement | null, lenAllComments:HTMLElement | null, button:HTMLButtonElement | null): void {
-        
+        // if (blockComment) {
+        //     const commentRatingPlusButton = blockComment.querySelector(`.comment_rating_button[data-change="plus"]`)
+        //     const commentRatingMinusButton = blockComment.querySelector(`.comment_rating_button[data-change="minus"]`)
+        //     // for (let ratingButton of commentRatingButtons) {
+        //     if (commentRatingPlusButton && commentRatingMinusButton) {
+        //         commentRatingPlusButton.addEventListener("click", ()=> {
+        //             console.log("зашли в обработку плюса")         
+        //             comment.changeRating(blockComment, <HTMLElement>commentRatingPlusButton) 
+        //         })
+        //         commentRatingMinusButton.addEventListener("click", ()=> {
+        //             console.log("зашли в обработку минуса")          
+        //             comment.changeRating(blockComment, <HTMLElement>commentRatingMinusButton) 
+        //         })
+        //     }
+        //         // }
+        // }
+
         button?.addEventListener ("click", (event) => {
-            event?.preventDefault();
             
             let textComment  = textArea?.value
             
@@ -155,6 +173,19 @@ export default class Main {
 
        
         
+    }
+
+    private prepareRatingButtons(blockComment:HTMLElement | null, comment: MyComment, answer:Answer, button:HTMLButtonElement | null): void {
+        // if (button && button.classList.contains("comment_rating_button")){
+        //     button?.addEventListener ("click", (event) => {
+        //         event?.preventDefault();
+        //         return
+        //     })
+        // }
+        button?.addEventListener ("click", (event) => {
+            event?.preventDefault();
+
+        })
     }
 
 
@@ -245,6 +276,40 @@ export default class Main {
     } 
 
     private prepareComments(user:User, comment:MyComment, answer:Answer, blockComment:HTMLElement | null, quantity:HTMLElement | null):void {
+            
+       // подготавливаем кнопки рейтинга комментов 
+        const blockCommentAll = document.querySelectorAll(".comment_block")
+        if (blockCommentAll) {
+            for (let block of blockCommentAll) {
+                //пропускаем основной блок ввода
+                if (block.id == "input_block" || block.classList.contains("answer_block")) { continue }
+                comment.changeRating(block, <HTMLElement>blockComment) 
+                // console.log("зашли в обработку блока коммента и проставили рейтинг и его цвет")  
+
+                const commentRatingPlusButton = block.querySelector(`.comment_rating_button[data-change="plus"]`)
+                const commentRatingMinusButton = block.querySelector(`.comment_rating_button[data-change="minus"]`)
+                // for (let ratingButton of commentRatingButtons) {
+                if (commentRatingPlusButton && commentRatingMinusButton) {
+                    commentRatingPlusButton.addEventListener("click", ()=> {
+                        // console.log("зашли в обработку плюса")         
+                        comment.changeRating(block, <HTMLElement>commentRatingPlusButton) 
+                    })
+                    commentRatingMinusButton.addEventListener("click", ()=> {
+                        // console.log("зашли в обработку минуса")          
+                        comment.changeRating(block, <HTMLElement>commentRatingMinusButton) 
+                    })
+                }
+                
+                const commentFavourButton = block.querySelector(`.comment_favour`)
+                if (commentFavourButton) {
+                    commentFavourButton.addEventListener("click", ()=> {
+                        // console.log("зашли в обработку плюса")         
+                        comment.changeFavourList(block, <HTMLElement>commentFavourButton) 
+                    })
+                }
+            }
+        }
+
         //создаем и публикуем комментарии других пользователей
         // для примера ограничимся максимум 50-ю ком-ми
         // const commentAnswerButtons = document.querySelectorAll(".comment_answer_button")
@@ -271,6 +336,31 @@ export default class Main {
                 //пропускаем основной блок ввода
                 if (block.id == "input_block") { continue }
 
+                
+                if (block.classList.contains("answer_block")) {
+                    //подготовка кнопок рейтингов (цикл нужен так как кнопка рейтинга не одна)
+                    comment.changeRating(block, <HTMLElement>blockComment) 
+                    const commentRatingButtons = block.querySelectorAll(".comment_rating_button")
+                    for (let ratingButton of commentRatingButtons) {
+                        ratingButton.addEventListener("click", ()=> {  
+                            // console.log("зашли в обработку клика кнопки рейтинга для ответа")       
+                            answer.changeRating(block, <HTMLElement>ratingButton) 
+                        })
+                    }
+
+                    //подготовка кнопок избранного
+                    const commentFavourButton = block.querySelector(`.comment_favour`)
+                    if (commentFavourButton) {
+                        commentFavourButton.addEventListener("click", ()=> {
+                            console.log("зашли в обработку избранного для ответа")         
+                            answer.changeFavourList(block, <HTMLElement>commentFavourButton) 
+                        })
+                    }
+                }
+
+
+
+                //подготовка кнопок ответа
                 const commentAnswerButton:HTMLButtonElement | null = block.querySelector(".comment_answer_button")
                 
                 if (!commentAnswerButton) { continue }
@@ -297,6 +387,9 @@ export default class Main {
                     const lengthAnswerElem:HTMLElement | null = answerInputBlock.querySelector(".comment_length")
 
                     this.prepareButtons(blockComment, comment, user, answer, textArea, lengthAnswerElem, lenAllComments, answerSubmitButton)
+                    
+                    
+                    // this.prepareButtons(blockComment, comment, user, answer, textArea, lengthAnswerElem, lenAllComments, commentRatingButton)
                     this.prepareInputElem(answer, textArea, answerSubmitButton, lengthAnswerElem)
                 } 
 
