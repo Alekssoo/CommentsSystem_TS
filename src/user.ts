@@ -1,18 +1,28 @@
 export default class User {
     public name: string; 
     public photo: string;
-    public accounts: Array<any> = new Array();  
+    public accounts: Array<any> = new Array();
+    public favorites: Array<String>;
+    public rated: Array<String>  
+
     constructor() { 
         this.name = "";
         this.photo = "";
-        this.accounts = []
+        this.favorites = [];
+        this.rated = []
+        this.accounts = [];
+
     }
 
-    private load() {
+    public load() {
         //подгружаем ранее сохраненных пользователей
         if (localStorage.getItem("accounts")) {
             this.accounts = JSON.parse(localStorage.getItem("accounts") as string)
         }
+    }
+
+    public save():void {
+        localStorage.setItem("accounts", JSON.stringify(this.accounts))
     }
 
     public addName(name: string):void {
@@ -55,7 +65,10 @@ export default class User {
                 
                     that.accounts.push({
                         name:that.name,
-                        photo:that.photo})
+                        photo:that.photo,
+                        rated:that.rated,
+                        favorites:that.favorites,
+                    })
                     console.log("создали нового пользователя")
                 // } else {
                 //     that.addName(that.accounts[that.accounts.length-1].name);
@@ -63,7 +76,8 @@ export default class User {
                 // }
                 
                 //сохраняем нового пользователя
-                localStorage.setItem("accounts", JSON.stringify(that.accounts))
+                that.save()
+                // localStorage.setItem("accounts", JSON.stringify(that.accounts))
             })
             // return authors.map((author:any) => {
             //     img.src = author.picture.medium;
@@ -106,8 +120,12 @@ export default class User {
         
     }
 
-    public writeComment():void {
-        
+    public changeFavorites(id: string, change:boolean):void {
+        if (change) {
+            this.favorites.push(id)
+        } else {
+            this.favorites = this.favorites.filter((elem) => elem !== id);
+        }
     }
 
 }

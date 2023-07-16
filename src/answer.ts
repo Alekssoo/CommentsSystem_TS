@@ -29,12 +29,15 @@ export default class Answer extends MyComment {
                 text: this.text,
                 rating: this.rating,
                 time: this.time,
+                isFavorite: false,
             })
         }
         
         this.save()
         // console.log("id для нового ответа равен = ", this.id)
     }
+
+
 
     public load(): void {
         if (localStorage.getItem("answers")) {
@@ -161,5 +164,66 @@ export default class Answer extends MyComment {
             }
 
         }
+    }
+
+    public prepareText():string {
+        // метод для генерации текста "чужих" комментариев
+        const text = []
+        text.push(`Называть проект Молочникова, в котором играют прекрасные Янковский и Эйдельштейн,
+         'сериалом с блогерами' - это реально несправедливо`)
+        text.push(`у Молочникова уже играла в спектакле Екатерина Варнава, которая тоже не актриса,
+         и получилось отлично.`)
+        text.push(`Вполне возможно, и Ивлеева с хорошим режиссером себя еще покажет`)
+        text.push(`'Кольца власти' просто позаимствовали имена из оригинала, куски истории, мало связанные между собой и выдали 
+        очередной среднячковый сериал на один раз в лучшем случае`)
+        text.push(`Объективности в отзывах самый минимум.`)
+        text.push(`Какую-то дичь несешь, братиш!`)
+        text.push(`Абсолютно согласен!`)
+        text.push(`Да нееет...`)
+
+        let randInd:number = Math.floor(Math.random()*((text.length-1)+1))
+   
+        return text[randInd]    
+    }
+
+    public createRandom(text: string, quantityComments: number, accounts: Array<any>):void {
+        // console.log("зашли в создание ответа")
+        //метод для генерации случайного "чужого" ответа
+        this.load()
+
+        let randUserNum = Math.floor(Math.random()*((accounts.length-1)+1))
+        // console.log("случайное имя пользователя для ответа = ", accounts[randUserNum].name)
+        // this.create(this.prepareText(), accounts[randUserNum].name)
+        // answer.showAll(blockComment,user.accounts)
+ 
+        this.setTime(Math.floor(Date.now()/1000))
+        // this.text = text
+        
+        let randParentId = Math.floor(Math.random()*((quantityComments-1)+1))
+        // console.log("id случайного родителя = ", randParentId)
+        let parentBlock = document.getElementById(String(randParentId))
+        // console.log("сам случайный родитель: ", parentBlock)
+        // let parentBlock = document.querySelector(".answer_input_block")?.parentElement?.parentElement?.parentElement
+        
+
+        if (parentBlock) {
+            let author = accounts[randUserNum].name //parentBlock.querySelector(".comment_ready_username")?.textContent
+            // console.log("id родит.блока равен = ", parentBlock.id)
+            let lenAnswers = parentBlock.querySelectorAll(".answer_block").length + 1
+            // let id = Number(`${randParentId}.${lenAnswers}`)
+            let id = `${randParentId}.${lenAnswers}`
+            // console.log("id случайного ответа = ", id)
+            this.elements.push({
+                id: id,
+                author: author,
+                text: text,
+                rating: 0,
+                time: this.time,
+                isFavorite: false,
+            })
+        }
+        
+        this.save()
+        // console.log("id для нового ответа равен = ", this.id)
     }
 }

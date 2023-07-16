@@ -5,6 +5,7 @@ export default class MyComment {
     public elements: Array<any> = new Array(); 
     public time: string;
     public author: string;
+    public isFavorite: boolean;
     protected id: number;
     public answers: Array<any> = new Array(); 
 
@@ -16,6 +17,7 @@ export default class MyComment {
         this.author = ""
         this.time = ""
         this.id = 0
+        this.isFavorite = false
         this.answers = []
     }
 
@@ -37,7 +39,8 @@ export default class MyComment {
             text: this.text,
             rating: this.rating,
             time: this.time,
-            answers:this.answers
+            answers:this.answers,
+            isFavorite: false,
         })
 
         this.save()
@@ -78,7 +81,7 @@ export default class MyComment {
         
                             Ответить</div>
                         </button>
-                        <button class="comment_favour opacity_text" type="button" data-favour="not">
+                        <button class="comment_favor opacity_text" type="button" data-favor="not">
                             <svg fill="#000000" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
                             viewBox="0 0 471.701 471.701" xml:space="preserve">
                                 <g>
@@ -91,7 +94,7 @@ export default class MyComment {
                                         C444.801,187.101,434.001,213.101,414.401,232.701z"/>
                                 </g>
                             </svg>
-                            <span class="comment_favour_text">В избранное</span>
+                            <span class="comment_favor_text">В избранное</span>
                         </button>
                         <div class="comment_rating">
                             <button class="comment_rating_button positive comment_rating_item" data-change="minus" type="button">-</button>
@@ -233,22 +236,28 @@ export default class MyComment {
     //         Ответить</div>`
     // }
 
-    public changeRating(block:Element | null, button:HTMLElement | null) :void {
+    public changeRating(block:Element | null, button:HTMLElement | null, rated:Array<String>) :void {
         // console.log("зашли в метод изменения рейтинга")
         
         this.load()
         const rating = block?.querySelector(".comment_rating_value")
         if(!block) {return}
-         for (let comment of this.elements) {
+        if (rated.find((elem) => elem === block.id)) {return}
+        // if (String(block.id) in rated) {return}
+        console.log("id блока = ", String(block.id))
+        console.log("список id = ", String(rated))
+        for (let comment of this.elements) {
             if (comment.id == block.id && rating && button?.dataset.change == "plus") {
-                // console.log("зашли в обработку клика плюса")
+                // console.log("зашли в обработку плюса")
                 comment.rating++
                 rating.textContent = comment.rating
+                rated.push(String(comment.id))
                 
             } else if (comment.id == block.id && rating && button?.dataset.change == "minus") {
-                // console.log("зашли в обработку клика минуса")
+                // console.log("зашли в обработку  минуса")
                 comment.rating--
                 rating.textContent = comment.rating
+                rated.push(String(comment.id))
             } else if(!(comment.id == block.id)) {
                 // console.log("не соответствует id")
             }
@@ -285,10 +294,10 @@ export default class MyComment {
         this.save()
     }
 
-    public changeFavourList(block:Element | null, button:HTMLElement | null) :void {
+    public changeFavorList(block:Element | null, button:HTMLElement | null) :void {
         if (!button) {return}
-        console.log("зашли в метод избранного")
-        if (button.dataset.favour == "not") {
+        // console.log("зашли в метод избранного")
+        if (button.dataset.favor == "not") {
             button.innerHTML = `
                 <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
                     width="24px" height="24px" viewBox="0 0 544.582 544.582"
@@ -299,13 +308,13 @@ export default class MyComment {
                             c27.234,0,244.801-188.267,267.751-258.876C561.595,160.732,521.509,81.631,448.069,57.839z"/>
                     </g>
                 </svg>
-                <span class="comment_favour_text">В избранном</span>`
+                <span class="comment_favor_text">В избранном</span>`
             // button.textContent = "В избранном"
-            button.dataset.favour = "yes"
+            button.dataset.favor = "yes"
         } else {
             button.innerHTML = `
                 <svg fill="#000000" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-                viewBox="0 0 471.701 471.701" xml:space="preserve" data-favour="not">
+                viewBox="0 0 471.701 471.701" xml:space="preserve" data-favor="not">
                     <g>
                         <path d="M433.601,67.001c-24.7-24.7-57.4-38.2-92.3-38.2s-67.7,13.6-92.4,38.3l-12.9,12.9l-13.1-13.1
                             c-24.7-24.7-57.6-38.4-92.5-38.4c-34.8,0-67.6,13.6-92.2,38.2c-24.7,24.7-38.3,57.5-38.2,92.4c0,34.9,13.7,67.6,38.4,92.3
@@ -316,9 +325,9 @@ export default class MyComment {
                             C444.801,187.101,434.001,213.101,414.401,232.701z"/>
                     </g>
                 </svg>
-                <span class="comment_favour_text">В избранное</span>`
+                <span class="comment_favor_text">В избранное</span>`
             // button.textContent = "В избранное"
-            button.dataset.favour = "not"
+            button.dataset.favor = "not"
         }
         
 
@@ -339,8 +348,6 @@ export default class MyComment {
         очередной среднячковый сериал на один раз в лучшем случае`)
         text.push(`Наверное, самая большая ошибка создателей сериала была в том, что они поставили уж слишком много надежд
          на поддержку фанатов вселенной. Как оказалось на деле, большинство 'фанатов' с самой настоящей яростью и желчью стали уничтожать сериал `)
-        text.push(`Объективности в отзывах самый минимум.`)
-        text.push(`Какую-то дичь несешь, братиш!`)
 
         let randInd:number = Math.floor(Math.random()*((text.length-1)+1))
    
