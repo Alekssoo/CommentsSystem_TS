@@ -269,6 +269,7 @@ export default class Main {
            
             this.generateComments(user, comment)
             this.prepareComments(user, comment, answer, blockComment, lenAllComments)
+            this.generateAnswers(answer, user, comment, blockComment)
             this.prepareAnswers(answer, user, comment, blockComment, lenAllComments)
         }) .catch(() => {
             if (commentPhoto && commentPhotoMob) {
@@ -301,7 +302,8 @@ export default class Main {
                  //пропускаем основной блок ввода
                  if (block.id == "input_block" || block.classList.contains("answer_block")) { continue }
 
-                 comment.changeRating(block, <HTMLElement>blockComment, user.rated) 
+                 comment.changeRating(block, <HTMLElement>blockComment, user.rated)
+                //  user.changeRated(String(block.id)) 
                 //  console.log("зашли в обработку блока коммента и возможно проставили рейтинг и его цвет")  
  
                  const commentRatingPlusButton = block.querySelector(`.comment_rating_button[data-change="plus"]`)
@@ -310,23 +312,28 @@ export default class Main {
                  if (commentRatingPlusButton && commentRatingMinusButton) {
                      commentRatingPlusButton.addEventListener("click", ()=> {
                         //  console.log("зашли в обработку плюса")
-                        user.load()      
+                        // user.load()      
                         comment.changeRating(block, <HTMLElement>commentRatingPlusButton, user.rated)
-                        user.save() 
+                        user.changeRated(String(block.id)) 
+                        // user.save() 
                      })
                      commentRatingMinusButton.addEventListener("click", ()=> {
                         //  console.log("зашли в обработку минуса")
-                        user.load()          
+                        // user.load()          
                         comment.changeRating(block, <HTMLElement>commentRatingMinusButton, user.rated)
-                        user.save() 
+                        user.changeRated(String(block.id)) 
+                        // user.save() 
                      })
                  }
                  
                  const commentFavorButton = block.querySelector(`.comment_favor`)
                  if (commentFavorButton) {
                      commentFavorButton.addEventListener("click", ()=> {
-                        //  console.log("зашли в обработку клика избранного")         
-                         comment.changeFavorList(block, <HTMLElement>commentFavorButton) 
+                        //  console.log("зашли в обработку клика избранного")
+                        // user.load() 
+                        user.changeFavorites(String(block.id))         
+                        comment.changeFavorButton(block, <HTMLElement>commentFavorButton)
+                        // user.save() 
                      })
                  }
              }
@@ -336,12 +343,15 @@ export default class Main {
         this.prepareQuantity(quantity, comment.elements, answer.elements)
     }
 
-    private prepareAnswers(answer:Answer, user: User, comment:MyComment, blockComment:HTMLElement | null, lenAllComments: HTMLElement | null) {
+    private generateAnswers(answer:Answer, user: User, comment:MyComment, blockComment:HTMLElement | null) {
         //генерим случайные ответы на случайные комменты
         answer.createRandom(answer.prepareText(), comment.elements.length, user.accounts)
         answer.showAll(blockComment, user.accounts)
         answer.createRandom(answer.prepareText(), comment.elements.length, user.accounts)
         answer.showAll(blockComment, user.accounts)
+    }
+
+    private prepareAnswers(answer:Answer, user: User, comment:MyComment, blockComment:HTMLElement | null, lenAllComments: HTMLElement | null) {
 
         const blockCommentAll = document.querySelectorAll(".comment_block") 
         const inputBlock:HTMLElement | null = document.getElementById("input_block")
@@ -358,21 +368,28 @@ export default class Main {
                     const commentRatingButtons = block.querySelectorAll(".comment_rating_button")
                     for (let ratingButton of commentRatingButtons) {
                         ratingButton.addEventListener("click", ()=> {  
-                            // console.log("зашли в обработку клика кнопки рейтинга для ответа")       
-                            user.load() 
+                            // console.log("зашли в обработку клика кнопки рейтинга для ответа")
+                                   
+                            // user.load() 
                             answer.changeRating(block, <HTMLElement>ratingButton, user.rated)
-                            user.save() 
+                            user.changeRated(String(block.id))
+                            // user.save() 
                         })
                     }
 
                     //подготовка кнопок избранного
-                    const commentFavorButton = block.querySelector(`.comment_favor`)
-                    if (commentFavorButton) {
+                    const commentFavorButtons = block.querySelectorAll(`.comment_favor`)
+                    for (let commentFavorButton of commentFavorButtons) {
                         commentFavorButton.addEventListener("click", ()=> {
-                            // console.log("зашли в обработку избранного для ответа")         
-                            answer.changeFavorList(block, <HTMLElement>commentFavorButton) 
+                            // console.log("зашли в обработку избранного для ответа")
+                            // user.load()
+                            user.changeFavorites(String(block.id))          
+                            answer.changeFavorButton(block, <HTMLElement>commentFavorButton)
+                            // user.save() 
                         })
                     }
+
+                    // еще прописать свойство избранного в пользователе и проверку
                 }
 
 

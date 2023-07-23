@@ -251,13 +251,14 @@ export default class MyComment {
                 // console.log("зашли в обработку плюса")
                 comment.rating++
                 rating.textContent = comment.rating
-                rated.push(String(comment.id))
+                
+                // rated.push(String(comment.id))
                 
             } else if (comment.id == block.id && rating && button?.dataset.change == "minus") {
                 // console.log("зашли в обработку  минуса")
                 comment.rating--
                 rating.textContent = comment.rating
-                rated.push(String(comment.id))
+                // rated.push(String(comment.id))
             } else if(!(comment.id == block.id)) {
                 // console.log("не соответствует id")
             }
@@ -294,7 +295,8 @@ export default class MyComment {
         this.save()
     }
 
-    public changeFavorList(block:Element | null, button:HTMLElement | null) :void {
+    public changeFavorButton(block:Element | null, button:HTMLElement | null) :void {
+        //прописать добавление и удаление из списка избранного у текущего пользователя
         if (!button) {return}
         // console.log("зашли в метод избранного")
         if (button.dataset.favor == "not") {

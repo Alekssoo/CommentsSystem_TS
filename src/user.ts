@@ -42,7 +42,7 @@ export default class User {
         //     console.log(error);
         // }
 
-        }
+    }
     
 
 
@@ -56,13 +56,9 @@ export default class User {
             .then(function(data) {
             let users = data.results;
             users.forEach((user:any) => {
-                // искусственно ограничимся 49 пользователями
-                // if ((that.accounts.length) <= 49) {
                     that.addName(user.login.username);
                     that.addPhoto(user.picture.medium)
-                
-                    
-                
+                               
                     that.accounts.push({
                         name:that.name,
                         photo:that.photo,
@@ -87,9 +83,9 @@ export default class User {
             //     append(ul, li);
             // })
             })
-        .catch(function(error) {
-            console.log(error);
-        });
+            .catch(function(error) {
+                console.log(error);
+            });
         //создаем нового пользователя
         // console.log("Введенное имя = ", name)
         // console.log("результат проверки на имя = ", this.accounts.some(account => account.name === name));
@@ -120,12 +116,41 @@ export default class User {
         
     }
 
-    public changeFavorites(id: string, change:boolean):void {
-        if (change) {
+    public changeFavorites(id: string):void {
+        this.load()
+        // const change:boolean | String = this.favorites.find((item) => item === id) != false;
+        const change = this.favorites.find((item) => item === id);
+        if (!change) {
             this.favorites.push(id)
+            console.log("пользователь: ", this.name)
+            console.log(`добавлен ${id}, список избранного: `, this.favorites)
         } else {
             this.favorites = this.favorites.filter((elem) => elem !== id);
+            console.log("пользователь: ", this.name)
+            console.log(`не добавлен ${id}, список избранного: `, this.favorites)
         }
+        const user = this.accounts.find((account) => account.name === this.name);
+        user.favorites = this.favorites
+        this.save()
+
+        
+
     }
 
+    public changeRated(id: string):void {
+        this.load()
+        // const change:boolean | String = this.favorites.find((item) => item === id) != false;
+        const change = this.rated.find((item) => item === id);
+        if (!change) {
+            this.rated.push(id)
+            console.log("пользователь: ", this.name)
+            console.log(`добавлен ${id}, список рейтинга: `, this.rated)
+        } else {
+            return
+        }
+        const user = this.accounts.find((account) => account.name === this.name);
+        user.rated = this.rated
+        this.save()
+    }
+    
 }
